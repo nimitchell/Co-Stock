@@ -3,11 +3,29 @@ package com.example.co_stock
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.viewModels
+import com.google.firebase.FirebaseApp
+import com.google.firebase.FirebaseOptions
+import com.google.firebase.database.FirebaseDatabase
 
 class MainActivity : AppCompatActivity() {
+
+    val viewModel: UserViewModel by viewModels<UserViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //set Firebase manually
+        val options = FirebaseOptions.Builder()
+            .setApplicationId("com.example.co_stock")
+            .setApiKey(getString(R.string.firebase_api_key))
+            .setDatabaseUrl(getString(R.string.firebase_api_key)
+        )
+            .build()
+        val app = FirebaseApp.initializeApp(application, options, "https://stockapp-e3a44")
+
+        viewModel.firebase.value = FirebaseDatabase.getInstance(app).reference
+        viewModel.firebase.value?.addValueEventListener(viewModel)
 
     }
 }
