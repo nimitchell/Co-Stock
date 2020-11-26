@@ -3,13 +3,22 @@ package com.example.co_stock
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
+import androidx.navigation.findNavController
 
 class MainActivity : AppCompatActivity() {
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId){
+            R.id.home_menu ->{
+                findNavController(R.id.nav_host_fragment).navigate(R.id.action_global_homeFragment)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        Log.d("Test", "hello")
-        Log.d("tag:","this work?")
     }
 }
