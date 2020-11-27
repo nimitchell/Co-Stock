@@ -17,6 +17,7 @@ import androidx.navigation.findNavController
 class MainActivity : AppCompatActivity() {
 
     val viewModel: UserViewModel by viewModels<UserViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.firebase.value = FirebaseDatabase.getInstance(app).reference
         viewModel.firebase.value?.addValueEventListener(viewModel)
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
