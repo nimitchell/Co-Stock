@@ -30,7 +30,9 @@ class UserViewModel : ViewModel(), ValueEventListener {
     fun updateUserData() {
         // TODO maybe uneeded?
     }
-    fun compareImages(image: MarketImage){}
+    fun compareImages(image: MarketImage){
+        // TODO Rachey?
+    }
 
 
     fun addUser(user:User){
@@ -39,7 +41,9 @@ class UserViewModel : ViewModel(), ValueEventListener {
         currentUser.value = user
         firebase.value?.child("users")?.child(user.username)?.setValue(user)
     }
-    fun determineSign(){}
+    fun determineSign() {
+        // TODO Rachey! Pop off queen!
+    }
 
     fun editUserInfo(name: String, bio: String, image:Bitmap){
         firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("name")?.setValue(name)
@@ -52,28 +56,36 @@ class UserViewModel : ViewModel(), ValueEventListener {
             firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("friends")?.setValue(currentUser.value?.friends)
         }
     }
-    // unneeded?
-    //fun getUserByName(username:String){}
-    fun getFriendCompatibility(friend:User){
+
+    fun getUserByName(username:String) {
+        // TODO remove? might be uneeded
+    }
+
+    fun getFriendCompatibility(friend:User): Int {
         //TODO Rachael's work feeds into here
+        return 0
     }
-    fun getFriendCompatibilityMessage(score:Int){
+    fun getFriendCompatibilityMessage(score:Int): Int {
         //TODO store in cloud?
+        return 0
     }
-    fun calculateDailyScore(){
+    fun calculateDailyScore(): Int {
         //TODO makes API calls
+        return 0
+
     }
-    fun getDailyReport(score:Int){
-        // TODO store in cloud?
+    fun getDailyReport(score:Int) : String{
+        return dailyMessage.value?.get(score)!!
     }
     fun getIndexScore(stock:String){
 
     }
-    fun getIndexReport(score:Int){
-
+    fun getIndexReport(score:Int) : String{
+        return indexMessage.value?.get(score)!!
     }
-    fun getRandomQuote(){
-        // TODO store in cloud?
+    fun getRandomQuote(): String{
+        var tmpList = quotes.value
+        return tmpList?.shuffled()?.take(1)!![0]
     }
 
     override fun onDataChange(snapshot: DataSnapshot) {
