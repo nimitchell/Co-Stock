@@ -4,11 +4,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_sign_in.view.*
 
-class RecyclerViewAdapter(var userList: Array<User>):
+class RecyclerViewAdapter(var friendsList: ArrayList<User>):
     RecyclerView.Adapter<RecyclerViewAdapter.RecyclerViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerViewHolder{
@@ -18,23 +19,30 @@ class RecyclerViewAdapter(var userList: Array<User>):
     }
 
     override fun onBindViewHolder(holder: RecyclerViewAdapter.RecyclerViewHolder, position: Int) {
-        holder.bind(userList[position])
+        holder.bind(friendsList[position], clickLambda)
     }
 
     override fun getItemCount(): Int {
-        return userList.size
+        return friendsList.size
     }
 
     lateinit var deleteLambda: (User) -> Unit
 
+    lateinit var clickLambda: (User) -> Unit
+
     class RecyclerViewHolder(val view: View, val deleteLambda: (User) -> Unit):
         RecyclerView.ViewHolder(view){
-        fun bind(user: User){
-            view.findViewById<TextView>(R.id.friendName_text).text = user.name
-            view.findViewById<TextView>(R.id.friendSign_text).text = user.sign
+        fun bind(friend: User, clickLambda: (User) -> Unit){
+            view.findViewById<ImageView>(R.id.friendProfile_img).setImageBitmap(friend.profilePic)
+            view.findViewById<TextView>(R.id.friendName_text).text = friend.name
+            view.findViewById<TextView>(R.id.friendSign_text).text = friend.sign
 
             view.findViewById<Button>(R.id.delete_button).setOnClickListener {
-                deleteLambda(user)
+                deleteLambda(friend)
+            }
+
+            view.setOnClickListener {
+                clickLambda(friend)
             }
         }
     }

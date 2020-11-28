@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".HomeFragment" >
+    android:orientation="vertical"
+    tools:context=".HomeFragment">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="660dp">
+        android:layout_height="0dp"
+        android:layout_weight="1">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
@@ -23,7 +25,7 @@
                 android:layout_gravity="center_horizontal"
                 android:fontFamily="sans-serif-medium"
                 android:text="Home"
-                android:textColor="#673AB7"
+                android:textColor="@color/colorPrimary"
                 android:textSize="30sp" />
 
             <ImageView
@@ -44,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="75dp"
                     android:text="Name:"
-                    android:textColor="#000000"
+                    android:textColor="@color/colorTextPrimary"
                     android:textSize="24sp" />
 
                 <TextView
@@ -53,7 +55,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="55dp"
                     android:text="User's Name"
-                    android:textColor="#000000"
+                    android:textColor="@color/colorTextPrimary"
                     android:textSize="24sp" />
             </LinearLayout>
 
@@ -68,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="75dp"
                     android:text="Sign:"
-                    android:textColor="#000000"
+                    android:textColor="@color/colorTextPrimary"
                     android:textSize="24sp"/>
 
                 <TextView
@@ -77,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="72dp"
                     android:text="User's Sign"
-                    android:textColor="#000000"
+                    android:textColor="@color/colorTextPrimary"
                     android:textSize="24sp" />
             </LinearLayout>
 
@@ -92,7 +94,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="75dp"
                     android:text="Bio:"
-                    android:textColor="#000000"
+                    android:textColor="@color/colorTextPrimary"
                     android:textSize="24sp"/>
 
                 <TextView
@@ -101,7 +103,7 @@
                     android:layout_height="85dp"
                     android:layout_marginStart="84dp"
                     android:text="User's Bio"
-                    android:textColor="#000000"
+                    android:textColor="@color/colorTextPrimary"
                     android:textSize="24sp" />
             </LinearLayout>
 
@@ -110,10 +112,10 @@
                 android:layout_width="120dp"
                 android:layout_height="60dp"
                 android:layout_gravity="center_horizontal"
-                android:backgroundTint="#673AB7"
+                android:backgroundTint="@color/colorPrimary"
                 android:text="Edit"
                 android:textSize="18sp"
-                android:textColor="#FFFFFF"/>
+                android:textColor="@color/colorTextSecondary"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -125,9 +127,9 @@
                     android:id="@+id/sign_tableText"
                     android:layout_width="150dp"
                     android:layout_height="40dp"
-                    android:background="#009688"
+                    android:background="@color/colorSecondary"
                     android:text="User's Sign"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/colorTextSecondary"
                     android:textAlignment="center"
                     android:textSize="20sp"
                     android:textStyle="bold" />
@@ -136,9 +138,9 @@
                     android:id="@+id/userSign_tableText"
                     android:layout_width="150dp"
                     android:layout_height="40dp"
-                    android:background="#009688"
+                    android:background="@color/colorSecondary"
                     android:text="Stock"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/colorTextSecondary"
                     android:textStyle="bold"
                     android:textSize="20sp"
                     android:textAlignment="center"/>
@@ -153,10 +155,10 @@
                     android:id="@+id/rising_tableText"
                     android:layout_width="150dp"
                     android:layout_height="40dp"
-                    android:background="#99009688"
+                    android:background="@color/colorSecondaryLight"
                     android:text="User's Rising"
                     android:textAlignment="center"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/colorTextSecondary"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -164,10 +166,10 @@
                     android:id="@+id/userRising_tableText"
                     android:layout_width="150dp"
                     android:layout_height="40dp"
-                    android:background="#99009688"
+                    android:background="@color/colorSecondaryLight"
                     android:text="Stock"
                     android:textAlignment="center"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/colorTextSecondary"
                     android:textSize="20sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -181,10 +183,10 @@
                     android:id="@+id/rival_tableText"
                     android:layout_width="150dp"
                     android:layout_height="40dp"
-                    android:background="#CC009688"
+                    android:background="@color/colorSecondaryHalfLight"
                     android:text="User's Rival"
                     android:textAlignment="center"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/colorTextSecondary"
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
@@ -192,10 +194,38 @@
                     android:id="@+id/userRival_tableText"
                     android:layout_width="150dp"
                     android:layout_height="40dp"
-                    android:background="#CC009688"
+                    android:background="@color/colorSecondaryHalfLight"
                     android:text="Stock"
                     android:textAlignment="center"
-                    android:textColor="#FFFFFF"
+                    android:textColor="@color/colorTextSecondary"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal">
+
+                <TextView
+                    android:id="@+id/moon_tableText"
+                    android:layout_width="150dp"
+                    android:layout_height="40dp"
+                    android:background="@color/colorSecondaryLight"
+                    android:text="User's Moon"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorTextSecondary"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/userMoon_tableText"
+                    android:layout_width="150dp"
+                    android:layout_height="40dp"
+                    android:background="@color/colorSecondaryLight"
+                    android:text="Stock"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorTextSecondary"
                     android:textSize="20sp"
                     android:textStyle="bold" />
             </LinearLayout>
@@ -207,7 +237,7 @@
                 android:layout_marginStart="100dp"
                 android:layout_marginTop="20dp"
                 android:text="Sign:"
-                android:textColor="#009688"
+                android:textColor="@color/colorSecondary"
                 android:textSize="26sp" />
 
             <TextView
@@ -216,7 +246,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="100dp"
                 android:text="Description of sign"
-                android:textColor="#000000"
+                android:textColor="@color/colorTextPrimary"
                 android:textSize="15sp" />
 
             <TextView
@@ -226,7 +256,7 @@
                 android:layout_marginStart="100dp"
                 android:layout_marginTop="20dp"
                 android:text="Rising:"
-                android:textColor="#009688"
+                android:textColor="@color/colorSecondary"
                 android:textSize="26sp" />
 
             <TextView
@@ -235,7 +265,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="100dp"
                 android:text="Description of sign"
-                android:textColor="#000000"
+                android:textColor="@color/colorTextPrimary"
                 android:textSize="15sp" />
 
             <TextView
@@ -245,7 +275,7 @@
                 android:layout_marginStart="100dp"
                 android:layout_marginTop="20dp"
                 android:text="Rival:"
-                android:textColor="#009688"
+                android:textColor="@color/colorSecondary"
                 android:textSize="26sp" />
 
             <TextView
@@ -254,23 +284,40 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="100dp"
                 android:text="Description of sign"
-                android:textColor="#000000"
+                android:textColor="@color/colorTextPrimary"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/userMoonText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="20dp"
+                android:text="Moon:"
+                android:textColor="@color/colorSecondary"
+                android:textSize="26sp" />
+
+            <TextView
+                android:id="@+id/userMoonDescription"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="100dp"
+                android:text="Description of sign"
+                android:textColor="@color/colorTextPrimary"
                 android:textSize="15sp" />
         </androidx.appcompat.widget.LinearLayoutCompat>
     </ScrollView>
 
-    <LinearLayout
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:orientation="horizontal"
-        android:layout_gravity="bottom">
+        android:layout_height="70dp">
 
         <Button
             android:id="@+id/friends_button"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#FF5722"
+            android:background="@color/colorAccent"
             android:text="Friends"
             android:textColor="#000000"
             android:textSize="23sp" />
@@ -280,9 +327,9 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="#FF5722"
+            android:background="@color/colorAccent"
             android:text="Daily Report"
             android:textColor="#000000"
             android:textSize="23sp" />
-    </LinearLayout>
-</FrameLayout>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</LinearLayout>
