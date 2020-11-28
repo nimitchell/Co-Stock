@@ -1,4 +1,19 @@
 package com.example.co_stock
 
-class MarketImage() {
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "indexTable")
+class MarketImage {
+    @PrimaryKey
+    var symbol = "movie title"
+
+    var date = ""
+    var open = 0.0f
+    var high = 0.0f
+    var low = 0.0f
+    var close = 0.0f
+    var change = 0.0f
+    var changePercent = 0.0f
+    var changeOverTime = 0.0f
 }
