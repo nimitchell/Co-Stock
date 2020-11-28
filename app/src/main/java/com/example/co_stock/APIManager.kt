@@ -45,7 +45,7 @@ class APIManager(val userViewModel: UserViewModel) {
     }
 
     fun decodeJson(json: String) {
-        val image = MarketImage()
+        val image = IndexImage()
         val data = JSONObject(json).getJSONArray("results")
         for (i in 0 until data.length()){
             val cur = data.getJSONObject(i)
