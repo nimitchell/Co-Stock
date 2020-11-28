@@ -18,6 +18,7 @@ import com.google.android.gms.common.api.internal.ApiKey
 class MainActivity : AppCompatActivity() {
 
     val viewModel: UserViewModel by viewModels<UserViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)

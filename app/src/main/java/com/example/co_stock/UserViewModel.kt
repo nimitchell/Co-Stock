@@ -15,6 +15,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
 
     var firebase = MutableLiveData<DatabaseReference>()
     var currentUser = MutableLiveData<User>()
+    var currentFriend = MutableLiveData<User>()
     var userAuth = MutableLiveData<FirebaseUser>()
     var friends = MutableLiveData<ArrayList<User>>()
     var quotes = MutableLiveData<ArrayList<String>>()
@@ -57,6 +58,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
         firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("bio")?.setValue(bio)
         firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("profilePic")?.setValue(image)
     }
+
     fun addFriend(username:String){
         if (firebase.value?.child("users")?.child(username) != null) {
             currentUser.value?.friends?.add(username)
@@ -102,6 +104,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
     fun calculateDailyScore(): Int {
         // TODO Rachey
         return 0
+
     }
     fun getDailyReport(score:Int) : String{
         return dailyMessage.value?.get(score)!!

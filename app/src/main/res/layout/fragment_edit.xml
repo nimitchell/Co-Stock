@@ -18,7 +18,7 @@
             android:layout_gravity="center_horizontal"
             android:fontFamily="sans-serif-medium"
             android:text="Edit Home"
-            android:textColor="#673AB7"
+            android:textColor="@color/colorPrimary"
             android:textSize="30sp" />
 
         <ImageView
@@ -35,8 +35,8 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="50dp"
             android:hint="Name"
-            android:textColor="#000000"
-            android:textColorHint="#99F44336" />
+            android:textColor="@color/colorTextPrimary"
+            android:textColorHint="@color/colorTextHint" />
 
         <EditText
             android:id="@+id/bio_editText"
@@ -45,8 +45,8 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="40dp"
             android:hint="Bio"
-            android:textColor="#000000"
-            android:textColorHint="#99F44336" />
+            android:textColor="@color/colorTextPrimary"
+            android:textColorHint="@color/colorTextHint" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
     <Button
@@ -54,8 +54,8 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_gravity="bottom"
-        android:background="#FFEB3B"
+        android:background="@color/colorAccent"
         android:text="Save"
-        android:textColor="#000000"
+        android:textColor="@color/colorTextPrimary"
         android:textSize="23sp" />
 </FrameLayout>
