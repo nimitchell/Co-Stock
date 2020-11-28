@@ -3,12 +3,11 @@ package com.example.co_stock
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
@@ -16,6 +15,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
 
     var firebase = MutableLiveData<DatabaseReference>()
     var currentUser = MutableLiveData<User>()
+    var userAuth = MutableLiveData<FirebaseUser>()
     var friends = MutableLiveData<ArrayList<User>>()
     var quotes = MutableLiveData<ArrayList<String>>()
     var dailyMessage = MutableLiveData<Map<Int, String>>()
@@ -27,9 +27,14 @@ class UserViewModel : ViewModel(), ValueEventListener {
         firebase.value?.addValueEventListener(this)
     }
 
+    fun updateAuth(user:FirebaseUser) {
+        userAuth.value = user
+    }
+
     fun updateUserData() {
         // TODO maybe uneeded?
     }
+
     fun compareImages(image: MarketImage){
         // TODO Rachey?
     }
@@ -41,8 +46,10 @@ class UserViewModel : ViewModel(), ValueEventListener {
         currentUser.value = user
         firebase.value?.child("users")?.child(user.username)?.setValue(user)
     }
-    fun determineSign() {
+
+    fun determineSign(date:String):String {
         // TODO Rachey! Pop off queen!
+        return ""
     }
 
     fun editUserInfo(name: String, bio: String, image:Bitmap){
@@ -57,22 +64,44 @@ class UserViewModel : ViewModel(), ValueEventListener {
         }
     }
 
+    fun removeFriend(username: String){
+        if (currentUser.value?.friends?.contains(username)!!) {
+            currentUser.value?.friends?.remove(username)
+            firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("friends")
+                ?.setValue(currentUser.value?.friends)
+        }
+    }
+
     fun getUserByName(username:String) {
-        // TODO remove? might be uneeded
+        val dbRef = firebase.value
+        val userRef = dbRef?.child("users")?.orderByChild("username")?.equalTo(username)
+        val valueEventListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (ds in dataSnapshot.children) {
+                    val user = ds.getValue(User::class.java)
+                    currentUser.value = user
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.d("error", databaseError.getMessage()) //Don't ignore errors!
+            }
+        }
+        userRef?.addListenerForSingleValueEvent(valueEventListener)
     }
 
     fun getFriendCompatibility(friend:User): Int {
         //TODO Rachael's work feeds into here
         return 0
     }
-    fun getFriendCompatibilityMessage(score:Int): Int {
-        //TODO store in cloud?
-        return 0
+    fun getFriendCompatibilityMessage(friend: String, score:Int): String {
+        var comp = compatibility.value?.get(score)!!
+        var output = "For you, ${friend} is a ${comp.personality}:\n${comp.message}"
+        return output
     }
     fun calculateDailyScore(): Int {
-        //TODO makes API calls
+        // TODO Rachey
         return 0
-
     }
     fun getDailyReport(score:Int) : String{
         return dailyMessage.value?.get(score)!!
