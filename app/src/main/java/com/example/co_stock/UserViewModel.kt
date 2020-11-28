@@ -16,6 +16,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
 
     var firebase = MutableLiveData<DatabaseReference>()
     var currentUser = MutableLiveData<User>()
+    var currentFriend = MutableLiveData<User>()
     var friends = MutableLiveData<ArrayList<User>>()
     var quotes = MutableLiveData<ArrayList<String>>()
     var dailyMessage = MutableLiveData<Map<Int, String>>()
@@ -41,6 +42,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
         currentUser.value = user
         firebase.value?.child("users")?.child(user.username)?.setValue(user)
     }
+
     fun determineSign() {
         // TODO Rachey! Pop off queen!
     }
@@ -50,6 +52,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
         firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("bio")?.setValue(bio)
         firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("profilePic")?.setValue(image)
     }
+
     fun addFriend(username:String){
         if (firebase.value?.child("users")?.child(username) != null) {
             currentUser.value?.friends?.add(username)
