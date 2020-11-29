@@ -6,11 +6,12 @@ import android.graphics.BitmapFactory
 import java.security.AccessController.getContext
 
 data class User(val username :String = "",
+                val email :String = "",
                 val birthday:String = "",
-                val birthImage:MarketImage,
+                val birthImage:MarketImage = MarketImage(),
                 var name:String = username,
                 val sign:String = "",
                 var bio:String = "",
-                var friends:ArrayList<String>,
-                var profilePic: Bitmap){
+                var friends:List<String> = emptyList(),
+                var profilePic: Int = 0) {
 }

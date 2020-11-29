@@ -13,6 +13,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.navigation.findNavController
+import com.google.android.gms.common.api.internal.ApiKey
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,15 +27,12 @@ class MainActivity : AppCompatActivity() {
         val options = FirebaseOptions.Builder()
             .setApplicationId("com.example.co_stock")
             .setApiKey(getString(R.string.firebase_api_key))
-            .setDatabaseUrl(getString(R.string.firebase_api_key)
-        )
-            .build()
+            .setDatabaseUrl(getString(R.string.firebase_database)).build()
         val app = FirebaseApp.initializeApp(application, options, "https://stockapp-e3a44")
 
         viewModel.firebase.value = FirebaseDatabase.getInstance(app).reference
         viewModel.firebase.value?.addValueEventListener(viewModel)
-    }
-
+        }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.menu, menu)
@@ -44,7 +42,9 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId){
             R.id.home_menu ->{
-                findNavController(R.id.nav_host_fragment).navigate(R.id.action_global_homeFragment)
+                if (viewModel.currentUser.value != null){
+                    findNavController(R.id.nav_host_fragment).navigate(R.id.action_global_homeFragment)
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)

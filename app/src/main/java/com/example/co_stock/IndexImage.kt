@@ -1,5 +1,8 @@
 package com.example.co_stock
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
 class IndexImage {
     var symbol = "symbol"
     var date = ""

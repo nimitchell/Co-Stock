@@ -9,4 +9,5 @@
     <color name="colorTextPrimary">#000000</color>
     <color name="colorTextSecondary">#FFFFFF</color>
     <color name="colorTextHint">#99F44336</color>
+    <color name="grey">#a3a3a3</color>
 </resources>

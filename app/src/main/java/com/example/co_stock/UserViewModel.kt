@@ -3,12 +3,11 @@ package com.example.co_stock
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
@@ -17,6 +16,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
     var firebase = MutableLiveData<DatabaseReference>()
     var currentUser = MutableLiveData<User>()
     var currentFriend = MutableLiveData<User>()
+    var userAuth = MutableLiveData<FirebaseUser>()
     var friends = MutableLiveData<ArrayList<User>>()
     var quotes = MutableLiveData<ArrayList<String>>()
     var dailyMessage = MutableLiveData<Map<Int, String>>()
@@ -28,25 +28,29 @@ class UserViewModel : ViewModel(), ValueEventListener {
         firebase.value?.addValueEventListener(this)
     }
 
+    fun updateAuth(user:FirebaseUser) {
+        userAuth.value = user
+    }
+
     fun updateUserData() {
         // TODO maybe uneeded?
     }
+
     fun compareImages(image: MarketImage){
         // TODO Rachey?
         // compare to self.marketImage
         //return integer between 1 and 5
     }
 
-
+    // TODO do we need a create user? From the username/dob
     fun addUser(user:User){
-        // add line below where addUser is being called to init profile pic
-        //var bm = BitmapFactory.decodeResource(getResources(), R.drawable.baseline_person_outline_black_48dp);
-        currentUser.value = user
+        currentUser.postValue(user)
         firebase.value?.child("users")?.child(user.username)?.setValue(user)
     }
 
-    fun determineSign() {
+    fun determineSign(date:String):String {
         // TODO Rachey! Pop off queen!
+        return ""
     }
 
     fun editUserInfo(name: String, bio: String, image:Bitmap){
@@ -57,13 +61,60 @@ class UserViewModel : ViewModel(), ValueEventListener {
 
     fun addFriend(username:String){
         if (firebase.value?.child("users")?.child(username) != null) {
-            currentUser.value?.friends?.add(username)
+            var newFriends = currentUser.value?.friends as ArrayList<String>
+            newFriends.add(username)
+            currentUser.value?.friends = newFriends.toList()
+            currentUser.postValue(currentUser.value)
             firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("friends")?.setValue(currentUser.value?.friends)
         }
     }
 
-    fun getUserByName(username:String) {
-        // TODO remove? might be uneeded
+    fun removeFriend(username: String){
+        if (currentUser.value?.friends?.contains(username)!!) {
+            var newFriends = currentUser.value?.friends as ArrayList<String>
+            newFriends.remove(username)
+            currentUser.value?.friends = newFriends.toList()
+            currentUser.postValue(currentFriend.value)
+            firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("friends")
+                ?.setValue(currentUser.value?.friends)
+        }
+    }
+
+    fun getUserByName(email:String) {
+        val dbRef = firebase.value
+        val userRef = dbRef?.child("users")?.orderByChild("email")?.equalTo(email)
+        val valueEventListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (ds in dataSnapshot.children) {
+                    val user = ds.getValue(User::class.java)
+                    currentUser.postValue(user)
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.d("error", databaseError.getMessage())
+            }
+        }
+        userRef?.addListenerForSingleValueEvent(valueEventListener)
+    }
+
+    fun checkUserExists(username:String):Boolean {
+        val dbRef = firebase.value
+        val userRef = dbRef?.child("users")?.orderByChild("username")?.equalTo(username)
+        var exists = false
+        val valueEventListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (ds in dataSnapshot.children) {
+                    exists = true
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.d("error", databaseError.getMessage())
+            }
+        }
+        userRef?.addListenerForSingleValueEvent(valueEventListener)
+        return exists
     }
 
     fun getFriendCompatibility(friend:User): Int {
@@ -71,12 +122,13 @@ class UserViewModel : ViewModel(), ValueEventListener {
         //compare the friend's market image to yours using compareImages
         return 0
     }
-    fun getFriendCompatibilityMessage(score:Int): Int {
-        //TODO store in cloud?
-        return 0
+    fun getFriendCompatibilityMessage(friend: String, score:Int): String {
+        var comp = compatibility.value?.get(score)!!
+        var output = "For you, ${friend} is a ${comp.personality}:\n${comp.message}"
+        return output
     }
     fun calculateDailyScore(): Int {
-        //TODO makes API calls
+        // TODO Rachey
         return 0
 
     }
@@ -104,7 +156,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
                     currentUser.value  = it
                 }
                 // update friends list
-                else if (currentUser.value?.friends?.contains(it.username)!!) {
+                else if (currentUser.value?.friends?.contains(it.username) != null && currentUser.value?.friends?.contains(it.username)!!) {
                     tmpFriends.add(it)
                 }
             }
@@ -154,5 +206,6 @@ class UserViewModel : ViewModel(), ValueEventListener {
 
 
     override fun onCancelled(error: DatabaseError) {
+        Log.e("db error", error.message)
     }
 }
