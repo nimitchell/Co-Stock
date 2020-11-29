@@ -14,6 +14,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.navigation.findNavController
 import com.google.android.gms.common.api.internal.ApiKey
+import com.google.firebase.storage.FirebaseStorage
 
 class MainActivity : AppCompatActivity() {
 
@@ -28,10 +29,11 @@ class MainActivity : AppCompatActivity() {
             .setApplicationId("com.example.co_stock")
             .setApiKey(getString(R.string.firebase_api_key))
             .setDatabaseUrl(getString(R.string.firebase_database)).build()
-        val app = FirebaseApp.initializeApp(application, options, "https://stockapp-e3a44")
+        val app = FirebaseApp.initializeApp(application, options, "https://co-stock")
 
         viewModel.firebase.value = FirebaseDatabase.getInstance(app).reference
         viewModel.firebase.value?.addValueEventListener(viewModel)
+
         }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater

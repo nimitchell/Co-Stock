@@ -13,5 +13,5 @@ data class User(val username :String = "",
                 val sign:String = "",
                 var bio:String = "",
                 var friends:List<String> = emptyList(),
-                var profilePic: Int = 0) {
+                var profilePic: String = username) {
 }
