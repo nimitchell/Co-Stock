@@ -46,13 +46,13 @@ class APIManager(val userViewModel: UserViewModel) {
         ): Call<ResponseBody>
     }
 
-    fun decodeJson(json: String) {
+    fun decodeJson(json: String, date: String) {
         val image = IndexImage()
         val data = JSONObject(json)
         val hist = data.getJSONArray("historical")
         for (i in 0 until hist.length()){
-            val cur = data.getJSONObject(i)
-            // check if date = input date
+            val cur = hist.getJSONObject(i)
+            if(cur.getString("date").substring(5) == date.substring(5))
             image.symbol = cur.getString("symbol")
             image.date = cur.getString("date")
             image.open = cur.getDouble("open").toFloat()
@@ -80,6 +80,7 @@ class APIManager(val userViewModel: UserViewModel) {
 
     inner class ImageCallback(date: String) :
         Callback<ResponseBody> {
+        val date = date
         override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
         }
 
@@ -89,7 +90,7 @@ class APIManager(val userViewModel: UserViewModel) {
         ) {
             if (response.isSuccessful) {
                 response.body()?.let {
-                    decodeJson(it.string())
+                    decodeJson(it.string(), date)
                 }
             }
         }
