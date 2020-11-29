@@ -1,6 +1,4 @@
 package com.example.co_stock
 
-class MarketImage() {
-
-
+data class MarketImage(val temp: String = "") {
 }
