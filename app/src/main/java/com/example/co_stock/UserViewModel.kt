@@ -78,8 +78,76 @@ class UserViewModel : ViewModel(), ValueEventListener {
         // TODO maybe uneeded?
     }
 
-    fun compareImages(image: MarketImage){
-        // TODO Rachey?
+    fun compareImagesChange(image: MarketImage): Int{
+        var count = 0
+        var maxImageChange = maxOf(image.DJI.change, image.FTSE.change, image.NASDAQ.change, image.SNP.change)
+        var selfImageChange = maxOf(currentUser.value?.birthImage?.DJI!!.change, currentUser.value?.birthImage?.FTSE!!.change, currentUser.value?.birthImage?.NASDAQ!!.change, currentUser.value?.birthImage?.SNP!!.change)
+        if(maxImageChange == image.DJI.change && selfImageChange == currentUser.value?.birthImage?.DJI!!.change) {
+            count++
+
+        }
+        else if(maxImageChange == image.FTSE.change && selfImageChange == currentUser.value?.birthImage?.FTSE!!.change)
+            count++
+        else if(maxImageChange == image.NASDAQ.change && selfImageChange == currentUser.value?.birthImage?.NASDAQ!!.change)
+            count++
+        else if(maxImageChange == image.SNP.change && selfImageChange == currentUser.value?.birthImage?.SNP!!.change)
+            count++
+        return count
+    }
+
+    fun compareImages(image: MarketImage): Int{
+        var count = 0
+        var maxImageChange = maxOf(image.DJI.change, image.FTSE.change, image.NASDAQ.change, image.SNP.change)
+        var selfImageChange = maxOf(currentUser.value?.birthImage?.DJI!!.change, currentUser.value?.birthImage?.FTSE!!.change, currentUser.value?.birthImage?.NASDAQ!!.change, currentUser.value?.birthImage?.SNP!!.change)
+        if(maxImageChange == image.DJI.change && selfImageChange == currentUser.value?.birthImage?.DJI!!.change)
+            count++
+        else if(maxImageChange == image.FTSE.change && selfImageChange == currentUser.value?.birthImage?.FTSE!!.change)
+            count++
+        else if(maxImageChange == image.NASDAQ.change && selfImageChange == currentUser.value?.birthImage?.NASDAQ!!.change)
+            count++
+        else if(maxImageChange == image.SNP.change && selfImageChange == currentUser.value?.birthImage?.SNP!!.change)
+            count++
+        var maxImageOpen = maxOf(image.DJI.open, image.FTSE.open, image.NASDAQ.open, image.SNP.open)
+        var selfImageOpen = maxOf(currentUser.value?.birthImage?.DJI!!.open, currentUser.value?.birthImage?.FTSE!!.open, currentUser.value?.birthImage?.NASDAQ!!.open, currentUser.value?.birthImage?.SNP!!.open)
+        if(maxImageOpen == image.DJI.open && selfImageOpen == currentUser.value?.birthImage?.DJI!!.open)
+            count++
+        else if(maxImageOpen == image.FTSE.open && selfImageOpen == currentUser.value?.birthImage?.FTSE!!.open)
+            count++
+        else if(maxImageOpen == image.NASDAQ.open && selfImageOpen == currentUser.value?.birthImage?.NASDAQ!!.open)
+            count++
+        else if(maxImageOpen == image.SNP.open && selfImageOpen == currentUser.value?.birthImage?.SNP!!.open)
+            count++
+        var maxImageClose = maxOf(image.DJI.close, image.FTSE.close, image.NASDAQ.close, image.SNP.close)
+        var selfImageClose = maxOf(currentUser.value?.birthImage?.DJI!!.close, currentUser.value?.birthImage?.FTSE!!.close, currentUser.value?.birthImage?.NASDAQ!!.close, currentUser.value?.birthImage?.SNP!!.close)
+        if(maxImageClose == image.DJI.close && selfImageClose == currentUser.value?.birthImage?.DJI!!.close)
+            count++
+        else if(maxImageClose == image.FTSE.close && selfImageClose == currentUser.value?.birthImage?.FTSE!!.close)
+            count++
+        else if(maxImageClose == image.NASDAQ.close && selfImageClose == currentUser.value?.birthImage?.NASDAQ!!.close)
+            count++
+        else if(maxImageClose == image.SNP.close && selfImageClose == currentUser.value?.birthImage?.SNP!!.close)
+            count++
+        var maxImageHigh = maxOf(image.DJI.high, image.FTSE.high, image.NASDAQ.high, image.SNP.high)
+        var selfImageHigh = maxOf(currentUser.value?.birthImage?.DJI!!.high, currentUser.value?.birthImage?.FTSE!!.high, currentUser.value?.birthImage?.NASDAQ!!.high, currentUser.value?.birthImage?.SNP!!.high)
+        if(maxImageHigh == image.DJI.high && selfImageHigh == currentUser.value?.birthImage?.DJI!!.high)
+            count++
+        else if(maxImageHigh == image.FTSE.high && selfImageHigh == currentUser.value?.birthImage?.FTSE!!.high)
+            count++
+        else if(maxImageHigh == image.NASDAQ.high && selfImageHigh == currentUser.value?.birthImage?.NASDAQ!!.high)
+            count++
+        else if(maxImageHigh == image.SNP.high && selfImageHigh == currentUser.value?.birthImage?.SNP!!.high)
+            count++
+        var minImageLow = minOf(image.DJI.low, image.FTSE.low, image.NASDAQ.low, image.SNP.low)
+        var selfImageLow = minOf(currentUser.value?.birthImage?.DJI!!.low, currentUser.value?.birthImage?.FTSE!!.low, currentUser.value?.birthImage?.NASDAQ!!.low, currentUser.value?.birthImage?.SNP!!.low)
+        if(minImageLow == image.DJI.low && selfImageLow == currentUser.value?.birthImage?.DJI!!.low)
+            count++
+        else if(minImageLow == image.FTSE.low && selfImageLow == currentUser.value?.birthImage?.FTSE!!.low)
+            count++
+        else if(minImageLow == image.NASDAQ.low && selfImageLow == currentUser.value?.birthImage?.NASDAQ!!.low)
+            count++
+        else if(minImageLow == image.SNP.low && selfImageLow == currentUser.value?.birthImage?.SNP!!.low)
+            count++
+        return count
     }
 
     fun addUser(user:User){
@@ -163,6 +231,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
 
     fun getFriendCompatibility(friend:User): Int {
         //TODO Rachael's work feeds into here
+        //compare the friend's market image to yours using compareImages
         return 0
     }
 
