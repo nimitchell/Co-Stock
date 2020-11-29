@@ -1,6 +1,7 @@
 package com.example.co_stock
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -28,16 +29,15 @@ class HomeFragment : Fragment() {
         friends_button.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_friendsFragment)
         }
-
+        Log.d("hi","got here")
         viewModel.currentUser.observe(viewLifecycleOwner, {
-            //profile_img.setImageBitmap(viewModel.currentUser.value?.profilePic)
-            userName_textView.text = viewModel.currentUser.value?.name
-            userSign_textView.text = viewModel.currentUser.value?.sign
-            userBio_textView.text = viewModel.currentUser.value?.bio
-
-            userSign_tableText.text = viewModel.currentUser.value?.sign
-
-            userSignText.text = viewModel.currentUser.value?.sign
+            Log.d("fuck",it.email.toString())
+            profile_img.setImageBitmap(viewModel.getProfileImage(it.profilePic))
+            userName_textView.text = it.name
+            userSign_textView.text = it.sign
+            userBio_textView.text = it.bio
+            userSign_tableText.text = it.sign
+            userSignText.text = it.sign
         })
     }
 

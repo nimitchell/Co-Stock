@@ -1,0 +1,33 @@
+{
+	"daily_messgage" : {
+		"1" : "oof",
+		"2" : "could be better",
+		"3" : "we aight",
+		"4" : "kinda popin ngl",
+		"5" : "POGGERS"
+	},
+	"index_message" : {
+		"1" : "absolute trashcan",
+		"2" : "prolly not it",
+		"3" : "it's chill",
+		"4" : "we good boyz",
+		"5" : "strait fire"
+	},
+	"quotes" : {
+		"1" : "Work until your bank account looks like a phone number.",
+		"2" : "The only thing standing between you and your goal is the bullshit story you keep telling yourself as to why you can’t achieve it.",
+		"3" : "It’s business. Leave your emotions at the door.",
+		"4" : "97% of the people who quit too soon are employed by the 3% who didn’t.",
+		"5" : "Hard work beats talent. Every time!",
+		"6" : "I want you to deal with your problems by becoming rich!",
+		"7" : "You wanna know what money sounds like? Go to a trading floor on Wall Street.",
+		"8" : "The real question is this: was all this legal? Absolutely f**king not. But we were making more money than we knew what do with."
+	},
+	"compatibility" : {
+		"1" : {"rating" : 1, "personality":"Black Swan", "message" : "Bad News! Stay away at all costs."},
+		"2" : {"rating" : 2, "personality":"Pig", "message" : "Keep you interactions purley profesional and watch your back."},
+		"3" : {"rating" : 3, "personality":"Sheep", "message" : "While not out to get you, you may lack common ground as a wolf."},
+		"4" : {"rating" : 4, "personality":"Stag", "message" : "Consistent and reliable. You can count on this person to always be on the up."},
+		"5" : {"rating" : 5, "personality":"Midas", "message" : "Everything they touch turns to Gold! This person should make a great buissness partner"}
+	}
+}

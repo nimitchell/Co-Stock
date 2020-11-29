@@ -30,7 +30,7 @@ class FriendsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewManger = LinearLayoutManager(activity)
-        viewAdapter = RecyclerViewAdapter(ArrayList())
+        viewAdapter = RecyclerViewAdapter(ArrayList(), viewModel::getProfileImage)
 
         friends_recyclerView.layoutManager = viewManger
         friends_recyclerView.adapter = viewAdapter

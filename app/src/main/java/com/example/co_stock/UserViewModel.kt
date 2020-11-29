@@ -10,6 +10,9 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import java.io.ByteArrayOutputStream
 
 class UserViewModel : ViewModel(), ValueEventListener {
 
@@ -22,10 +25,48 @@ class UserViewModel : ViewModel(), ValueEventListener {
     var dailyMessage = MutableLiveData<Map<Int, String>>()
     var indexMessage = MutableLiveData<Map<Int, String>>()
     var compatibility = MutableLiveData<Map<Int, Compatibility>>()
+    var storage = MutableLiveData<StorageReference>()
 
     init {
         firebase.value = Firebase.database.getReference("") // empty string means get root
         firebase.value?.addValueEventListener(this)
+        storage.value = FirebaseStorage.getInstance().getReference("images")
+    }
+
+    fun setImage(name: String, image:Bitmap){
+        val baos = ByteArrayOutputStream()
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
+        val ref = storage.value?.child(name)
+        var uploadTask = ref?.putBytes(data)
+        val urlTask = uploadTask?.continueWithTask { task ->
+            if (!task.isSuccessful) {
+                task.exception?.let {
+                    throw it
+                }
+            }
+            ref?.downloadUrl
+        }?.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val downloadUri = task.result
+            } else {
+                Log.d("Failure", "Upload Failed")
+            }
+        }
+    }
+
+    fun getProfileImage(img_name: String):Bitmap{
+        var imageRef = storage.value?.child(img_name)
+        lateinit var imagebytes:ByteArray
+        val ONE_MEGABYTE: Long = 1024 * 1024
+        imageRef?.getBytes(ONE_MEGABYTE)?.addOnSuccessListener {
+            // Data for "images/island.jpg" is returned, use this as needed
+            imagebytes = it
+        }?.addOnFailureListener {
+            // Handle any errors
+            throw it
+        }
+        return BitmapFactory.decodeByteArray(imagebytes,0, imagebytes.size)
     }
 
     fun updateAuth(user:FirebaseUser) {
@@ -42,7 +83,8 @@ class UserViewModel : ViewModel(), ValueEventListener {
 
     // TODO do we need a create user? From the username/dob
     fun addUser(user:User){
-        currentUser.postValue(user)
+        currentUser.value = user
+        Log.d("addUser", currentUser.value?.username!!)
         firebase.value?.child("users")?.child(user.username)?.setValue(user)
     }
 
@@ -62,7 +104,6 @@ class UserViewModel : ViewModel(), ValueEventListener {
             var newFriends = currentUser.value?.friends as ArrayList<String>
             newFriends.add(username)
             currentUser.value?.friends = newFriends.toList()
-            currentUser.postValue(currentUser.value)
             firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("friends")?.setValue(currentUser.value?.friends)
         }
     }
@@ -72,7 +113,6 @@ class UserViewModel : ViewModel(), ValueEventListener {
             var newFriends = currentUser.value?.friends as ArrayList<String>
             newFriends.remove(username)
             currentUser.value?.friends = newFriends.toList()
-            currentUser.postValue(currentFriend.value)
             firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("friends")
                 ?.setValue(currentUser.value?.friends)
         }
@@ -85,7 +125,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (ds in dataSnapshot.children) {
                     val user = ds.getValue(User::class.java)
-                    currentUser.postValue(user)
+                    currentUser.value = user
                 }
             }
 
@@ -149,8 +189,9 @@ class UserViewModel : ViewModel(), ValueEventListener {
         snapshot.child("users").children.forEach {
             it.getValue(User::class.java)?.let {
                 // update current user
-                if(it.username == currentUser.value?.username){
-                    currentUser.value  = it
+                if(it.email == userAuth.value?.email) {
+                    Log.d("onDataChange", it.username)
+                    currentUser.value = it
                 }
                 // update friends list
                 else if (currentUser.value?.friends?.contains(it.username) != null && currentUser.value?.friends?.contains(it.username)!!) {
