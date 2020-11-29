@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         val options = FirebaseOptions.Builder()
             .setApplicationId("com.example.co_stock")
             .setApiKey(getString(R.string.firebase_api_key))
-            .setDatabaseUrl(getString(R.string.firebase_api_key)).build()
+            .setDatabaseUrl(getString(R.string.firebase_database)).build()
         val app = FirebaseApp.initializeApp(application, options, "https://stockapp-e3a44")
 
         viewModel.firebase.value = FirebaseDatabase.getInstance(app).reference

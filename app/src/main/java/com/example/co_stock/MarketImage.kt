@@ -1,4 +1,6 @@
 package com.example.co_stock
 
-class MarketImage() {
+import java.io.Serializable
+
+data class MarketImage(val temp: String = "") {
 }

@@ -42,9 +42,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
 
 
     fun addUser(user:User){
-        // add line below where addUser is being called to init profile pic
-        //var bm = BitmapFactory.decodeResource(getResources(), R.drawable.baseline_person_outline_black_48dp);
-        currentUser.value = user
+        currentUser.postValue(user)
         firebase.value?.child("users")?.child(user.username)?.setValue(user)
     }
 
@@ -61,35 +59,60 @@ class UserViewModel : ViewModel(), ValueEventListener {
 
     fun addFriend(username:String){
         if (firebase.value?.child("users")?.child(username) != null) {
-            currentUser.value?.friends?.add(username)
+            var newFriends = currentUser.value?.friends as ArrayList<String>
+            newFriends.add(username)
+            currentUser.value?.friends = newFriends.toList()
+            currentUser.postValue(currentUser.value)
             firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("friends")?.setValue(currentUser.value?.friends)
         }
     }
 
     fun removeFriend(username: String){
         if (currentUser.value?.friends?.contains(username)!!) {
-            currentUser.value?.friends?.remove(username)
+            var newFriends = currentUser.value?.friends as ArrayList<String>
+            newFriends.remove(username)
+            currentUser.value?.friends = newFriends.toList()
+            currentUser.postValue(currentFriend.value)
             firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("friends")
                 ?.setValue(currentUser.value?.friends)
         }
     }
 
-    fun getUserByName(username:String) {
+    fun getUserByName(email:String) {
         val dbRef = firebase.value
-        val userRef = dbRef?.child("users")?.orderByChild("username")?.equalTo(username)
+        val userRef = dbRef?.child("users")?.orderByChild("email")?.equalTo(email)
         val valueEventListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (ds in dataSnapshot.children) {
                     val user = ds.getValue(User::class.java)
-                    currentUser.value = user
+                    currentUser.postValue(user)
                 }
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                Log.d("error", databaseError.getMessage()) //Don't ignore errors!
+                Log.d("error", databaseError.getMessage())
             }
         }
         userRef?.addListenerForSingleValueEvent(valueEventListener)
+    }
+
+    fun checkUserExists(username:String):Boolean {
+        val dbRef = firebase.value
+        val userRef = dbRef?.child("users")?.orderByChild("username")?.equalTo(username)
+        var exists = false
+        val valueEventListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                for (ds in dataSnapshot.children) {
+                    exists = true
+                }
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.d("error", databaseError.getMessage())
+            }
+        }
+        userRef?.addListenerForSingleValueEvent(valueEventListener)
+        return exists
     }
 
     fun getFriendCompatibility(friend:User): Int {
@@ -130,7 +153,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
                     currentUser.value  = it
                 }
                 // update friends list
-                else if (currentUser.value?.friends?.contains(it.username)!!) {
+                else if (currentUser.value?.friends?.contains(it.username) != null && currentUser.value?.friends?.contains(it.username)!!) {
                     tmpFriends.add(it)
                 }
             }
@@ -180,5 +203,6 @@ class UserViewModel : ViewModel(), ValueEventListener {
 
 
     override fun onCancelled(error: DatabaseError) {
+        Log.e("db error", error.message)
     }
 }

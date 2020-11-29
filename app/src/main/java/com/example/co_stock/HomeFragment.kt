@@ -30,7 +30,7 @@ class HomeFragment : Fragment() {
         }
 
         viewModel.currentUser.observe(viewLifecycleOwner, {
-            profile_img.setImageBitmap(viewModel.currentUser.value?.profilePic)
+            //profile_img.setImageBitmap(viewModel.currentUser.value?.profilePic)
             userName_textView.text = viewModel.currentUser.value?.name
             userSign_textView.text = viewModel.currentUser.value?.sign
             userBio_textView.text = viewModel.currentUser.value?.bio

@@ -24,7 +24,21 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginHorizontal="100dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/grey"
+        android:ems="10"
+        android:hint="username"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/email_editText" />
+
+    <EditText
+        android:id="@+id/email_editText"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginHorizontal="100dp"
+        android:layout_marginTop="8dp"
         android:background="@color/grey"
         android:ems="10"
         android:hint="Email"
@@ -64,11 +78,15 @@
         android:background="@color/grey"
         />
 
-    <CalendarView
+    <DatePicker
         android:id="@+id/reg_calenderView"
-        android:layout_width="249dp"
-        android:layout_height="227dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="8dp"
         android:layout_marginTop="8dp"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_confirm_editText" />
@@ -94,7 +112,7 @@
         android:layout_marginTop="8dp"
         android:text="Login"
         android:textAlignment="center"
-        android:textColor="@color/colorPrimaryDark"
+        android:textColor="@color/colorPrimary"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

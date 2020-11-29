@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.fragment_register.*
 
@@ -57,11 +58,14 @@ class RegisterFragment : Fragment() {
         // Initialize Firebase Auth
         auth = FirebaseAuth.getInstance()
 
-        val username = username_editText.text.toString()
-
         reg_signUp_button.setOnClickListener {
-            if (username == "") {
-                Toast.makeText(activity, "Missing Username",
+            val email = email_editText.text.toString()
+            val username = username_editText.text.toString()
+            val conflictUser = viewModel.checkUserExists(username)
+
+
+            if (email == "") {
+                Toast.makeText(activity, "Missing Email",
                     Toast.LENGTH_SHORT).show();
             }
             else if (password_editText.text.toString() == "") {
@@ -72,20 +76,30 @@ class RegisterFragment : Fragment() {
                 Toast.makeText(activity, "Passwords must match",
                     Toast.LENGTH_SHORT).show();
             }
+            else if (username == "") {
+                Toast.makeText(activity, "Missing Username",
+                    Toast.LENGTH_SHORT).show();
+            }
+
+            else if (conflictUser) {
+                Toast.makeText(activity, "Username Unavailable",
+                    Toast.LENGTH_SHORT).show();
+            }
             else {
-                auth.createUserWithEmailAndPassword(username, password_editText.text.toString())
+                auth.createUserWithEmailAndPassword(email, password_editText.text.toString())
                     .addOnCompleteListener(){ task ->
                         if (task.isSuccessful) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("Success", "createUserWithEmail:success")
                             val user = auth.currentUser
                             viewModel.updateAuth(user!!)
+                            var date = "${reg_calenderView.month}/${reg_calenderView.dayOfMonth}/${reg_calenderView.year}"
                             viewModel.addUser(User(username,
-                                birthday = reg_calenderView.date.toString(),
-                                sign = viewModel.determineSign(reg_calenderView.date.toString()),
+                                email = user.email.toString(),
+                                birthday = date,
+                                sign = viewModel.determineSign(date),
                                 birthImage = MarketImage(),
-                                friends = arrayListOf<String>(),
-                                profilePic = BitmapFactory.decodeResource(getResources(), R.drawable.baseline_person_outline_black_48dp)
+                                profilePic = R.drawable.baseline_person_outline_black_48dp
                                 ))
                             findNavController().navigate(R.id.action_registerFragment_to_homeFragment)
                         } else {
@@ -94,14 +108,12 @@ class RegisterFragment : Fragment() {
                             Toast.makeText(activity, "Email or Password is incorrect.",
                                 Toast.LENGTH_SHORT).show()
                         }
-
-                        // ...
                     }
             }
         }
 
         reg_login_text.setOnClickListener {
-            findNavController().navigate(R.id.action_signInFragment_to_registerFragment)
+            findNavController().navigate(R.id.action_registerFragment_to_signInFragment)
         }
     }
 

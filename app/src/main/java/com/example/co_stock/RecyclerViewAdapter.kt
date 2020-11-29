@@ -33,7 +33,7 @@ class RecyclerViewAdapter(var friendsList: ArrayList<User>):
     class RecyclerViewHolder(val view: View, val deleteLambda: (User) -> Unit):
         RecyclerView.ViewHolder(view){
         fun bind(friend: User, clickLambda: (User) -> Unit){
-            view.findViewById<ImageView>(R.id.friendProfile_img).setImageBitmap(friend.profilePic)
+            //view.findViewById<ImageView>(R.id.friendProfile_img).setImageBitmap(friend.profilePic)
             view.findViewById<TextView>(R.id.friendName_text).text = friend.name
             view.findViewById<TextView>(R.id.friendSign_text).text = friend.sign
 

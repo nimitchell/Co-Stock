@@ -26,10 +26,10 @@ class SignInFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        login_button.setOnClickListener {
+        // Initialize Firebase Auth
+        auth = FirebaseAuth.getInstance()
 
-            // Initialize Firebase Auth
-            auth = FirebaseAuth.getInstance()
+        login_button.setOnClickListener {
             val username = login_username.text.toString()
             val password = login_password.text.toString()
 
@@ -42,7 +42,7 @@ class SignInFragment : Fragment() {
                     Toast.LENGTH_SHORT).show();
             }
             else {
-                auth.signInWithEmailAndPassword(username, password_editText.text.toString())
+                auth.signInWithEmailAndPassword(username, password)
                     .addOnCompleteListener() { task ->
                         if (task.isSuccessful) {
                             // Sign in success, update UI with the signed-in user's information
@@ -68,10 +68,7 @@ class SignInFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+
     }
 
     override fun onCreateView(
@@ -97,8 +94,8 @@ class SignInFragment : Fragment() {
         fun newInstance(param1: String, param2: String) =
             SignInFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putString("", param1)
+                    putString("", param2)
                 }
             }
     }
