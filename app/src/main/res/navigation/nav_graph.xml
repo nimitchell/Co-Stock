@@ -28,6 +28,9 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
         <action
             android:id="@+id/action_homeFragment_to_editFragment"
             app:destination="@id/editFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_dailyReportFragment"
+            app:destination="@id/dailyReportFragment" />
     </fragment>
     <action
         android:id="@+id/action_global_homeFragment"
@@ -36,7 +39,11 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/friendsFragment"
         android:name="com.example.co_stock.FriendsFragment"
         android:label="fragment_friends"
-        tools:layout="@layout/fragment_friends" />
+        tools:layout="@layout/fragment_friends" >
+        <action
+            android:id="@+id/action_friendsFragment_to_friendDetailsFragment"
+            app:destination="@id/friendDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/editFragment"
         android:name="com.example.co_stock.EditFragment"
@@ -54,4 +61,23 @@ xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/action_registerFragment_to_signInFragment"
             app:destination="@id/signInFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/friendDetailsFragment"
+        android:name="com.example.co_stock.FriendDetailsFragment"
+        android:label="fragment_friend_details"
+        tools:layout="@layout/fragment_friend_details" />
+    <fragment
+        android:id="@+id/dailyReportFragment"
+        android:name="com.example.co_stock.DailyReportFragment"
+        android:label="fragment_daily_report"
+        tools:layout="@layout/fragment_daily_report" >
+        <action
+            android:id="@+id/action_dailyReportFragment_to_detailReportFragment"
+            app:destination="@id/detailReportFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailReportFragment"
+        android:name="com.example.co_stock.DetailReportFragment"
+        android:label="fragment_detail_report"
+        tools:layout="@layout/fragment_detail_report" />
 </navigation>

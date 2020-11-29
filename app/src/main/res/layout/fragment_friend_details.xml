@@ -7,13 +7,13 @@
     tools:context=".FriendDetailsFragment" >
 
     <TextView
-        android:id="@+id/relationship_textView"
+        android:id="@+id/freindDetails_textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
         android:layout_gravity="center_horizontal"
         android:fontFamily="sans-serif-medium"
-        android:text="Relationship"
+        android:text="Friend Details"
         android:textColor="@color/colorPrimary"
         android:textSize="30sp" />
 

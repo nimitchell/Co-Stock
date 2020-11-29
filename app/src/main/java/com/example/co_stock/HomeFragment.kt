@@ -21,6 +21,26 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //profile_img.setImageBitmap(viewModel.currentUser.value?.profilePic)
+        userName_textView.text = viewModel.currentUser.value?.name
+        userSign_textView.text = viewModel.currentUser.value?.sign
+        userBio_textView.text = viewModel.currentUser.value?.bio
+
+        // TODO need to set the text once getting signs is figured out
+        userSign_tableText.text = viewModel.currentUser.value?.sign
+        userRising_tableText.text = ""
+        userRival_tableText.text = ""
+        userMoon_tableText.text = ""
+
+        // TODO add desciptions
+        userSignText.text = viewModel.currentUser.value?.sign
+        userSignDescription.text = ""
+        userRisingText.text = ""
+        userRisingDescription.text = ""
+        userRivalText.text = ""
+        userRivalDescription.text = ""
+        userMoonText.text = ""
+        userMoonDescription.text = ""
 
         edit_button.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_editFragment)
@@ -28,16 +48,13 @@ class HomeFragment : Fragment() {
         friends_button.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_friendsFragment)
         }
+        dailyReport_button.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_dailyReportFragment)
+        }
 
         viewModel.currentUser.observe(viewLifecycleOwner, {
-            //profile_img.setImageBitmap(viewModel.currentUser.value?.profilePic)
             userName_textView.text = viewModel.currentUser.value?.name
-            userSign_textView.text = viewModel.currentUser.value?.sign
             userBio_textView.text = viewModel.currentUser.value?.bio
-
-            userSign_tableText.text = viewModel.currentUser.value?.sign
-
-            userSignText.text = viewModel.currentUser.value?.sign
         })
     }
 

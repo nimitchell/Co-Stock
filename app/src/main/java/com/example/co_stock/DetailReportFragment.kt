@@ -6,37 +6,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.navigation.fragment.findNavController
-import kotlinx.android.synthetic.main.fragment_edit.*
+import kotlinx.android.synthetic.main.fragment_detail_report.*
 
 /**
  * A simple [Fragment] subclass.
- * Use the [EditFragment.newInstance] factory method to
+ * Use the [DetailReportFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class EditFragment : Fragment() {
+class DetailReportFragment : Fragment() {
 
     val viewModel: UserViewModel by activityViewModels<UserViewModel>()
 
-    override fun onPause() {
-        super.onPause()
-        // TODO change from imgView to photoapp template thing
-        viewModel.editUserInfo(name_editText.text.toString(), bio_editText.text.toString(), null)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        save_button.setOnClickListener {
-            findNavController().popBackStack()
-        }
+        val indexScore = viewModel.getIndexScore(viewModel.currentIndex.value!!)
+        index_textView.text = viewModel.currentIndex.value!!
+        indexScore_text.text = indexScore.toString()
+        indexReport_text.text = viewModel.getIndexReport(indexScore)
     }
 
-    override fun onCreateView(
+     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_edit, container, false)
+        return inflater.inflate(R.layout.fragment_detail_report, container, false)
     }
 }

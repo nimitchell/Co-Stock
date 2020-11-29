@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_friends.*
@@ -25,6 +26,7 @@ class FriendsFragment : Fragment() {
 
     val friendClickLambda: (User) -> Unit ={
         viewModel.currentFriend.value = it
+        findNavController().navigate(R.id.action_friendsFragment_to_friendDetailsFragment)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -41,7 +43,7 @@ class FriendsFragment : Fragment() {
         })
 
         val deleteLambda: (User) -> Unit = {
-            // removeFriend fun in viewModel
+            viewModel.removeFriend(it.username)
         }
 
         viewAdapter.deleteLambda = deleteLambda

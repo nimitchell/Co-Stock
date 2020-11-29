@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".DailyReportFragment" >
+
+    <TextView
+        android:id="@+id/dailyReport_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center_horizontal"
+        android:fontFamily="sans-serif-medium"
+        android:text="Daily Report"
+        android:textColor="@color/colorPrimary"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/quote_textView"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:fontFamily="monospace"
+        android:text="Random Quote"
+        android:textAlignment="center"
+        android:textColor="@color/colorTextHint"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/dailyReport_text"
+        android:layout_width="275dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        android:text="Daily Report Overview"
+        android:textColor="@color/colorTextPrimary"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/firstIndex_button"
+        android:layout_width="280dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="35dp"
+        android:background="@color/colorAccent"
+        android:text="First Index"
+        android:textAllCaps="false"
+        android:textColor="#000000"
+        android:textSize="19sp" />
+
+    <Button
+        android:id="@+id/secondIndex_button"
+        android:layout_width="280dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:background="@color/colorAccent"
+        android:text="Second Index"
+        android:textAllCaps="false"
+        android:textColor="#000000"
+        android:textSize="19sp" />
+
+    <Button
+        android:id="@+id/thirdIndex_button"
+        android:layout_width="280dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:background="@color/colorAccent"
+        android:text="Third Index"
+        android:textAllCaps="false"
+        android:textColor="#000000"
+        android:textSize="19sp" />
+
+    <Button
+        android:id="@+id/fourthIndex_button"
+        android:layout_width="280dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:background="@color/colorAccent"
+        android:text="Fourth Index"
+        android:textAllCaps="false"
+        android:textColor="#000000"
+        android:textSize="19sp" />
+</LinearLayout>

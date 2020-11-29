@@ -16,6 +16,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
     var firebase = MutableLiveData<DatabaseReference>()
     var currentUser = MutableLiveData<User>()
     var currentFriend = MutableLiveData<User>()
+    var currentIndex = MutableLiveData<String>()
     var userAuth = MutableLiveData<FirebaseUser>()
     var friends = MutableLiveData<ArrayList<User>>()
     var quotes = MutableLiveData<ArrayList<String>>()
@@ -40,7 +41,6 @@ class UserViewModel : ViewModel(), ValueEventListener {
         // TODO Rachey?
     }
 
-    // TODO do we need a create user? From the username/dob
     fun addUser(user:User){
         currentUser.postValue(user)
         firebase.value?.child("users")?.child(user.username)?.setValue(user)
@@ -51,10 +51,16 @@ class UserViewModel : ViewModel(), ValueEventListener {
         return ""
     }
 
-    fun editUserInfo(name: String, bio: String, image:Bitmap){
-        firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("name")?.setValue(name)
-        firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("bio")?.setValue(bio)
-        firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("profilePic")?.setValue(image)
+    fun editUserInfo(name: String?, bio: String?, image:Bitmap?){
+        if (name!= null){
+            firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("name")?.setValue(name)
+        }
+        if (bio != null){
+            firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("bio")?.setValue(bio)
+        }
+        if (image != null) {
+            firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("profilePic")?.setValue(image)
+        }
     }
 
     fun addFriend(username:String){
@@ -119,25 +125,31 @@ class UserViewModel : ViewModel(), ValueEventListener {
         //TODO Rachael's work feeds into here
         return 0
     }
+
     fun getFriendCompatibilityMessage(friend: String, score:Int): String {
         var comp = compatibility.value?.get(score)!!
         var output = "For you, ${friend} is a ${comp.personality}:\n${comp.message}"
         return output
     }
+
     fun calculateDailyScore(): Int {
         // TODO Rachey
         return 0
 
     }
+
     fun getDailyReport(score:Int) : String{
         return dailyMessage.value?.get(score)!!
     }
-    fun getIndexScore(stock:String){
 
+    fun getIndexScore(stock:String): Int{
+        return 0
     }
+
     fun getIndexReport(score:Int) : String{
         return indexMessage.value?.get(score)!!
     }
+
     fun getRandomQuote(): String{
         var tmpList = quotes.value
         return tmpList?.shuffled()?.take(1)!![0]

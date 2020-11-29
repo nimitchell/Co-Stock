@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".DetailReportFragment" >
+
+    <TextView
+        android:id="@+id/detailReport_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:layout_gravity="center_horizontal"
+        android:fontFamily="sans-serif-medium"
+        android:text="Detailed Index Report"
+        android:textColor="@color/colorPrimary"
+        android:textSize="30sp" />
+
+    <TextView
+        android:id="@+id/index_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:text="Sign/Index Name"
+        android:textColor="@color/colorSecondary"
+        android:textSize="24sp" />
+
+    <TextView
+        android:id="@+id/compare_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="Comparison with Birthday Index Position"
+        android:textColor="@color/colorTextPrimary"
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/indexScore_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        android:text="5"
+        android:textSize="30sp"
+        android:textColor="@color/colorSecondary"/>
+
+    <TextView
+        android:id="@+id/indexReport_text"
+        android:layout_width="210dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="Index Report"
+        android:textColor="@color/colorTextPrimary"
+        android:textSize="15sp" />
+</LinearLayout>
