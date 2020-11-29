@@ -32,6 +32,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
         firebase.value = Firebase.database.getReference("") // empty string means get root
         firebase.value?.addValueEventListener(this)
         storage.value = FirebaseStorage.getInstance().getReference("images")
+        currentUser.value = User()
     }
 
     fun setImage(name: String, image:Bitmap){
@@ -199,7 +200,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (ds in dataSnapshot.children) {
                     val user = ds.getValue(User::class.java)
-                    currentUser.value = user
+                    currentUser.postValue(user)
                 }
             }
 
@@ -272,7 +273,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
                 // update current user
                 if(it.email == userAuth.value?.email) {
                     Log.d("onDataChange", it.username)
-                    currentUser.value = it
+                    currentUser.postValue(it)
                 }
                 // update friends list
                 else if (currentUser.value?.friends?.contains(it.username) != null && currentUser.value?.friends?.contains(it.username)!!) {
@@ -321,6 +322,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
             }
         }
         compatibility.postValue(tmpCompatability)
+
     }
 
 
