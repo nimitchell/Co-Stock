@@ -93,7 +93,7 @@ class RegisterFragment : Fragment() {
                             Log.d("Success", "createUserWithEmail:success")
                             val user = auth.currentUser
                             viewModel.updateAuth(user!!)
-                            var date = "${reg_calenderView.month}/${reg_calenderView.dayOfMonth}/${reg_calenderView.year}"
+                            var date = "${reg_calenderView.year}-${reg_calenderView.month}-${reg_calenderView.dayOfMonth}"
                             viewModel.addUser(User(username,
                                 email = user.email.toString(),
                                 birthday = date,

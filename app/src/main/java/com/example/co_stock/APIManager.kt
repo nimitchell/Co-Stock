@@ -62,7 +62,7 @@ class APIManager(val userViewModel: UserViewModel) {
             image.change = cur.getDouble("change").toFloat()
             image.changePercent = cur.getDouble("change_percent").toFloat()
             image.changeOverTime = cur.getDouble("change_over_time").toFloat()
-            userViewModel.updateCurrentMI(image.symbol, image)
+            //userViewModel.updateCurrentMI(image.symbol, image)
             //use function to update MI value for current II
         }
     }
