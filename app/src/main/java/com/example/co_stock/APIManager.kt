@@ -1,8 +1,10 @@
 package com.example.co_stock
 
 import android.util.Log
+import androidx.core.content.res.TypedArrayUtils.getString
 import com.example.co_stock.UserViewModel
 import okhttp3.ResponseBody
+import org.json.JSONArray
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
@@ -44,11 +46,13 @@ class APIManager(val userViewModel: UserViewModel) {
         ): Call<ResponseBody>
     }
 
-    fun decodeJson(json: String) {
+    fun decodeJson(json: String, date: String) {
         val image = IndexImage()
-        val data = JSONObject(json).getJSONArray("results")
-        for (i in 0 until data.length()){
-            val cur = data.getJSONObject(i)
+        val data = JSONObject(json)
+        val hist = data.getJSONArray("historical")
+        for (i in 0 until hist.length()){
+            val cur = hist.getJSONObject(i)
+            if(cur.getString("date").substring(5) == date.substring(5))
             image.symbol = cur.getString("symbol")
             image.date = cur.getString("date")
             image.open = cur.getDouble("open").toFloat()
@@ -58,23 +62,25 @@ class APIManager(val userViewModel: UserViewModel) {
             image.change = cur.getDouble("change").toFloat()
             image.changePercent = cur.getDouble("change_percent").toFloat()
             image.changeOverTime = cur.getDouble("change_over_time").toFloat()
-            //userViewModel.compareImages(image)
+            //userViewModel.updateCurrentMI(image.symbol, image)
+            //use function to update MI value for current II
         }
     }
 
-    fun fetchImage() {
+    fun fetchImage(date: String) {
         val call = service.getFTSE(apiKey)
-        call.enqueue(ImageCallback("FTSE"))
+        call.enqueue(ImageCallback(date))
         val call2 = service.getDJI(apiKey)
-        call2.enqueue(ImageCallback("DJI"))
+        call2.enqueue(ImageCallback(date))
         val call3 = service.getSNP(apiKey)
-        call3.enqueue(ImageCallback("SNP"))
+        call3.enqueue(ImageCallback(date))
         val call4 = service.getNASDAQ(apiKey)
-        call4.enqueue(ImageCallback("NASDAQ"))
+        call4.enqueue(ImageCallback(date))
     }
 
-    inner class ImageCallback(s: String) :
+    inner class ImageCallback(date: String) :
         Callback<ResponseBody> {
+        val date = date
         override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
         }
 
@@ -84,7 +90,7 @@ class APIManager(val userViewModel: UserViewModel) {
         ) {
             if (response.isSuccessful) {
                 response.body()?.let {
-                    decodeJson(it.string())
+                    decodeJson(it.string(), date)
                 }
             }
         }
