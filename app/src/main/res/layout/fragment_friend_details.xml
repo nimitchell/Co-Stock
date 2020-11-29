@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".FriendDetailsFragment" >
+
+    <TextView
+        android:id="@+id/relationship_textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal"
+        android:fontFamily="sans-serif-medium"
+        android:text="Relationship"
+        android:textColor="@color/colorPrimary"
+        android:textSize="30sp" />
+
+    <ImageView
+        android:id="@+id/friendProfile_img"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp">
+
+        <TextView
+            android:id="@+id/friendName_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="75dp"
+            android:text="Name:"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/friendName_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="55dp"
+            android:text="Friend's Name"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="24sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/friendSign_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="75dp"
+            android:text="Sign:"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="24sp"/>
+
+        <TextView
+            android:id="@+id/friendSign_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="72dp"
+            android:text="Friend's Sign"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="24sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/friendBio_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="75dp"
+            android:text="Bio:"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="24sp"/>
+
+        <TextView
+            android:id="@+id/friendBio_text"
+            android:layout_width="wrap_content"
+            android:layout_height="85dp"
+            android:layout_marginStart="84dp"
+            android:text="Friend's Bio"
+            android:textColor="@color/colorTextPrimary"
+            android:textSize="24sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp">
+
+        <TextView
+            android:id="@+id/compatibility_textView"
+            android:layout_width="180dp"
+            android:layout_height="40dp"
+            android:background="@color/colorSecondary"
+            android:text="Compatibility"
+            android:textColor="@color/colorTextSecondary"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/compatibility_textNumber"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:background="@color/colorSecondaryLight"
+            android:text="Number"
+            android:textColor="@color/colorTextSecondary"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:textAlignment="center"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/compatibility_message"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        android:text="Compatibility Message"
+        android:textColor="@color/colorTextPrimary"
+        android:textSize="15sp" />
+</LinearLayout>

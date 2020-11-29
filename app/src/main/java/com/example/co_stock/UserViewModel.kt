@@ -35,7 +35,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
         // TODO Rachey?
     }
 
-
+    // TODO do we need a create user? From the username/dob
     fun addUser(user:User){
         // add line below where addUser is being called to init profile pic
         //var bm = BitmapFactory.decodeResource(getResources(), R.drawable.baseline_person_outline_black_48dp);
