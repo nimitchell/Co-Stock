@@ -33,6 +33,8 @@ class UserViewModel : ViewModel(), ValueEventListener {
     }
     fun compareImages(image: MarketImage){
         // TODO Rachey?
+        // compare to self.marketImage
+        //return integer between 1 and 5
     }
 
 
@@ -66,6 +68,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
 
     fun getFriendCompatibility(friend:User): Int {
         //TODO Rachael's work feeds into here
+        //compare the friend's market image to yours using compareImages
         return 0
     }
     fun getFriendCompatibilityMessage(score:Int): Int {

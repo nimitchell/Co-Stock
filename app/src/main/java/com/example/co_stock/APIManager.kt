@@ -46,7 +46,7 @@ class APIManager(val userViewModel: UserViewModel) {
 
     fun decodeJson(json: String) {
         val image = IndexImage()
-        val data = JSONObject(json).getJSONArray("results")
+        val data = JSONObject(json)
         for (i in 0 until data.length()){
             val cur = data.getJSONObject(i)
             image.symbol = cur.getString("symbol")

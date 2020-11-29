@@ -1,13 +1,7 @@
 package com.example.co_stock
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-
-@Entity(tableName = "indexTable")
 class IndexImage {
-    @PrimaryKey
     var symbol = "symbol"
-
     var date = ""
     var open = 0.0f
     var high = 0.0f
