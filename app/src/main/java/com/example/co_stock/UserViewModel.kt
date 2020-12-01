@@ -1,18 +1,22 @@
 package com.example.co_stock
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.io.ByteArrayOutputStream
+import kotlin.collections.ArrayList
+
 
 class UserViewModel : ViewModel(), ValueEventListener {
 
@@ -20,6 +24,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
     var currentUser = MutableLiveData<User>()
     var currentFriend = MutableLiveData<User>()
     var currentIndex = MutableLiveData<String>()
+    var dailyImage = MutableLiveData<MarketImage>()
     var userAuth = MutableLiveData<FirebaseUser>()
     var friends = MutableLiveData<ArrayList<User>>()
     var quotes = MutableLiveData<ArrayList<String>>()
@@ -79,74 +84,183 @@ class UserViewModel : ViewModel(), ValueEventListener {
         // TODO maybe uneeded?
     }
 
-    fun compareImagesChange(image: MarketImage): Int{
-        var count = 0
-        var maxImageChange = maxOf(image.DJI.change, image.FTSE.change, image.NASDAQ.change, image.SNP.change)
-        var selfImageChange = maxOf(currentUser.value?.birthImage?.DJI!!.change, currentUser.value?.birthImage?.FTSE!!.change, currentUser.value?.birthImage?.NASDAQ!!.change, currentUser.value?.birthImage?.SNP!!.change)
-        if(maxImageChange == image.DJI.change && selfImageChange == currentUser.value?.birthImage?.DJI!!.change) {
-            count++
+    fun sortedChange(image: MarketImage): List<IndexImage>{
+        var selfChangeSort = listOf(image.FTSE, image.DJI, image.SNP, image.NASDAQ)
+        var selfChangeGlobal = selfChangeSort.sortedBy { it.change }
+        return selfChangeGlobal
+    }
 
+    fun compareImagesChange(image: MarketImage): Int {
+        var count = 1
+        var moveOn = false
+        var imageChange =
+            listOf(image.DJI.change, image.FTSE.change, image.NASDAQ.change, image.SNP.change)
+        var selfChange = listOf(
+            currentUser.value?.birthImage?.DJI!!.change,
+            currentUser.value?.birthImage?.FTSE!!.change,
+            currentUser.value?.birthImage?.NASDAQ!!.change,
+            currentUser.value?.birthImage?.SNP!!.change
+        )
+        var imageChangeSorted = imageChange.sorted()
+        var selfChangeSorted = selfChange.sorted()
+        for(k in 0..3){
+            if(imageChange.get(k) == imageChangeSorted.get(0) && selfChange.get(k) == selfChangeSorted.get(0))
+                moveOn = true
         }
-        else if(maxImageChange == image.FTSE.change && selfImageChange == currentUser.value?.birthImage?.FTSE!!.change)
-            count++
-        else if(maxImageChange == image.NASDAQ.change && selfImageChange == currentUser.value?.birthImage?.NASDAQ!!.change)
-            count++
-        else if(maxImageChange == image.SNP.change && selfImageChange == currentUser.value?.birthImage?.SNP!!.change)
-            count++
+        if(moveOn) {
+            for (i in 1..3) {
+                for (j in 0..3) {
+                    if (imageChange.get(j) == imageChangeSorted.get(i) && selfChange.get(j) == selfChangeSorted.get(i))
+                        count++
+                }
+            }
+        }
+        else{
+            count = 0
+        }
+        return count
+    }
+
+    fun compareImagesOpen(image: MarketImage): Int {
+        var count = 1
+        var moveOn = false
+        var imageOpen =
+            listOf(image.DJI.open, image.FTSE.open, image.NASDAQ.open, image.SNP.open)
+        var selfOpen = listOf(
+            currentUser.value?.birthImage?.DJI!!.open,
+            currentUser.value?.birthImage?.FTSE!!.open,
+            currentUser.value?.birthImage?.NASDAQ!!.open,
+            currentUser.value?.birthImage?.SNP!!.open
+        )
+        var imageOpenSorted = imageOpen.sorted()
+        var selfOpenSorted = selfOpen.sorted()
+        for(k in 0..3){
+            if(imageOpen.get(k) == imageOpenSorted.get(0) && selfOpen.get(k) == selfOpenSorted.get(0))
+                moveOn = true
+        }
+        if(moveOn) {
+            for (i in 1..3) {
+                for (j in 0..3) {
+                    if (imageOpen.get(j) == imageOpenSorted.get(i) && selfOpen.get(j) == selfOpenSorted.get(i))
+                        count++
+                }
+            }
+        }
+        else{
+            count = 0
+        }
+        return count
+    }
+
+    fun compareImagesClose(image: MarketImage): Int {
+        var count = 1
+        var moveOn = false
+        var imageClose =
+            listOf(image.DJI.close, image.FTSE.close, image.NASDAQ.close, image.SNP.close)
+        var selfClose = listOf(
+                    currentUser.value?.birthImage?.DJI!!.close,
+            currentUser.value?.birthImage?.FTSE!!.close,
+            currentUser.value?.birthImage?.NASDAQ!!.close,
+            currentUser.value?.birthImage?.SNP!!.close
+        )
+        var imageCloseSorted = imageClose.sorted()
+        var selfCloseSorted = selfClose.sorted()
+        for(k in 0..3){
+            if(imageClose.get(k) == imageCloseSorted.get(0) && selfClose.get(k) == selfCloseSorted.get(0))
+                moveOn = true
+        }
+        if(moveOn) {
+            for (i in 1..3) {
+                for (j in 0..3) {
+                    if (imageClose.get(j) == imageCloseSorted.get(i) && selfClose.get(j) == selfCloseSorted.get(i))
+                        count++
+                }
+            }
+        }
+        else{
+            count = 0
+        }
+        return count
+    }
+
+    fun compareImagesHigh(image: MarketImage): Int {
+        var count = 1
+        var moveOn = false
+        var imageHigh =
+            listOf(image.DJI.high, image.FTSE.high, image.NASDAQ.high, image.SNP.high)
+        var selfHigh = listOf(
+            currentUser.value?.birthImage?.DJI!!.high,
+            currentUser.value?.birthImage?.FTSE!!.high,
+            currentUser.value?.birthImage?.NASDAQ!!.high,
+            currentUser.value?.birthImage?.SNP!!.high
+        )
+        var imageHighSorted = imageHigh.sorted()
+        var selfHighSorted = selfHigh.sorted()
+        for(k in 0..3){
+            if(imageHigh.get(k) == imageHighSorted.get(0) && selfHigh.get(k) == selfHighSorted.get(0))
+                moveOn = true
+        }
+        if(moveOn) {
+            for (i in 1..3) {
+                for (j in 0..3) {
+                    if (imageHigh.get(j) == imageHighSorted.get(i) && selfHigh.get(j) == selfHighSorted.get(i))
+                        count++
+                }
+            }
+        }
+        else{
+            count = 0
+        }
+        return count
+    }
+
+    fun compareImagesLow(image: MarketImage): Int {
+        var count = 0
+        var moveOn = false
+        var imageLow =
+            listOf(image.DJI.low, image.FTSE.low, image.NASDAQ.low, image.SNP.low)
+        var selfLow = listOf(
+            currentUser.value?.birthImage?.DJI!!.low,
+            currentUser.value?.birthImage?.FTSE!!.low,
+            currentUser.value?.birthImage?.NASDAQ!!.low,
+            currentUser.value?.birthImage?.SNP!!.low
+        )
+        var imageLowSorted = imageLow.sorted()
+        var selfLowSorted = selfLow.sorted()
+        for(k in 0..3){
+            if(imageLow.get(k) == imageLowSorted.get(3) && selfLow.get(k) == selfLowSorted.get(3))
+                moveOn = true
+        }
+        if(moveOn) {
+            for (i in 0..2) {
+                for (j in 0..3) {
+                    if (imageLow.get(j) == imageLowSorted.get(i) && selfLow.get(j) == selfLowSorted.get(i))
+                        count++
+                }
+            }
+        }
+        else{
+            count = 0
+        }
         return count
     }
 
     fun compareImages(image: MarketImage): Int{
         var count = 0
-        var maxImageChange = maxOf(image.DJI.change, image.FTSE.change, image.NASDAQ.change, image.SNP.change)
-        var selfImageChange = maxOf(currentUser.value?.birthImage?.DJI!!.change, currentUser.value?.birthImage?.FTSE!!.change, currentUser.value?.birthImage?.NASDAQ!!.change, currentUser.value?.birthImage?.SNP!!.change)
-        if(maxImageChange == image.DJI.change && selfImageChange == currentUser.value?.birthImage?.DJI!!.change)
+        var change = compareImagesChange(image)
+        if (change > 0)
             count++
-        else if(maxImageChange == image.FTSE.change && selfImageChange == currentUser.value?.birthImage?.FTSE!!.change)
+        var open = compareImagesOpen(image)
+        if (open > 0)
             count++
-        else if(maxImageChange == image.NASDAQ.change && selfImageChange == currentUser.value?.birthImage?.NASDAQ!!.change)
+            var close = compareImagesClose(image)
+        if (close > 0)
             count++
-        else if(maxImageChange == image.SNP.change && selfImageChange == currentUser.value?.birthImage?.SNP!!.change)
+            var high = compareImagesHigh(image)
+        if (high > 0)
             count++
-        var maxImageOpen = maxOf(image.DJI.open, image.FTSE.open, image.NASDAQ.open, image.SNP.open)
-        var selfImageOpen = maxOf(currentUser.value?.birthImage?.DJI!!.open, currentUser.value?.birthImage?.FTSE!!.open, currentUser.value?.birthImage?.NASDAQ!!.open, currentUser.value?.birthImage?.SNP!!.open)
-        if(maxImageOpen == image.DJI.open && selfImageOpen == currentUser.value?.birthImage?.DJI!!.open)
-            count++
-        else if(maxImageOpen == image.FTSE.open && selfImageOpen == currentUser.value?.birthImage?.FTSE!!.open)
-            count++
-        else if(maxImageOpen == image.NASDAQ.open && selfImageOpen == currentUser.value?.birthImage?.NASDAQ!!.open)
-            count++
-        else if(maxImageOpen == image.SNP.open && selfImageOpen == currentUser.value?.birthImage?.SNP!!.open)
-            count++
-        var maxImageClose = maxOf(image.DJI.close, image.FTSE.close, image.NASDAQ.close, image.SNP.close)
-        var selfImageClose = maxOf(currentUser.value?.birthImage?.DJI!!.close, currentUser.value?.birthImage?.FTSE!!.close, currentUser.value?.birthImage?.NASDAQ!!.close, currentUser.value?.birthImage?.SNP!!.close)
-        if(maxImageClose == image.DJI.close && selfImageClose == currentUser.value?.birthImage?.DJI!!.close)
-            count++
-        else if(maxImageClose == image.FTSE.close && selfImageClose == currentUser.value?.birthImage?.FTSE!!.close)
-            count++
-        else if(maxImageClose == image.NASDAQ.close && selfImageClose == currentUser.value?.birthImage?.NASDAQ!!.close)
-            count++
-        else if(maxImageClose == image.SNP.close && selfImageClose == currentUser.value?.birthImage?.SNP!!.close)
-            count++
-        var maxImageHigh = maxOf(image.DJI.high, image.FTSE.high, image.NASDAQ.high, image.SNP.high)
-        var selfImageHigh = maxOf(currentUser.value?.birthImage?.DJI!!.high, currentUser.value?.birthImage?.FTSE!!.high, currentUser.value?.birthImage?.NASDAQ!!.high, currentUser.value?.birthImage?.SNP!!.high)
-        if(maxImageHigh == image.DJI.high && selfImageHigh == currentUser.value?.birthImage?.DJI!!.high)
-            count++
-        else if(maxImageHigh == image.FTSE.high && selfImageHigh == currentUser.value?.birthImage?.FTSE!!.high)
-            count++
-        else if(maxImageHigh == image.NASDAQ.high && selfImageHigh == currentUser.value?.birthImage?.NASDAQ!!.high)
-            count++
-        else if(maxImageHigh == image.SNP.high && selfImageHigh == currentUser.value?.birthImage?.SNP!!.high)
-            count++
-        var minImageLow = minOf(image.DJI.low, image.FTSE.low, image.NASDAQ.low, image.SNP.low)
-        var selfImageLow = minOf(currentUser.value?.birthImage?.DJI!!.low, currentUser.value?.birthImage?.FTSE!!.low, currentUser.value?.birthImage?.NASDAQ!!.low, currentUser.value?.birthImage?.SNP!!.low)
-        if(minImageLow == image.DJI.low && selfImageLow == currentUser.value?.birthImage?.DJI!!.low)
-            count++
-        else if(minImageLow == image.FTSE.low && selfImageLow == currentUser.value?.birthImage?.FTSE!!.low)
-            count++
-        else if(minImageLow == image.NASDAQ.low && selfImageLow == currentUser.value?.birthImage?.NASDAQ!!.low)
-            count++
-        else if(minImageLow == image.SNP.low && selfImageLow == currentUser.value?.birthImage?.SNP!!.low)
+        var low = compareImagesLow(image)
+        if (low > 0)
             count++
         return count
     }
@@ -157,9 +271,18 @@ class UserViewModel : ViewModel(), ValueEventListener {
         firebase.value?.child("users")?.child(user.username)?.setValue(user)
     }
 
-    fun determineSign(date:String):String {
+    fun determineSign(image: MarketImage):String {
         // TODO Rachey! Pop off queen!
-        return ""
+        var selfChangeGlobal = sortedChange(image)
+        var sign = selfChangeGlobal.get(0).symbol
+        if(sign == "FTSE")
+            return "FTSE-o"
+        else if(sign == "DJI")
+            return "Dow Jones-ces"
+        else if(sign == "GSPTSE")
+            return "SNP-isces"
+        else
+            return "NASDAQ-rius"
     }
 
     fun editUserInfo(name: String?, bio: String?, image:Bitmap?){
@@ -244,8 +367,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
 
     fun calculateDailyScore(): Int {
         // TODO Rachey
-        return 0
-
+        return compareImages(dailyImage.value!!)
     }
 
     fun getDailyReport(score:Int) : String{
