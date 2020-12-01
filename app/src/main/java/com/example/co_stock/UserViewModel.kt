@@ -84,7 +84,12 @@ class UserViewModel : ViewModel(), ValueEventListener {
         // TODO maybe uneeded?
     }
 
-    var selfChangeSorted = emptyList<Float>()
+    fun sortedChange(image: MarketImage): List<IndexImage>{
+        var selfChangeSort = listOf(image.FTSE, image.DJI, image.SNP, image.NASDAQ)
+        var selfChangeGlobal = selfChangeSort.sortedBy { it.change }
+        return selfChangeGlobal
+    }
+
     fun compareImagesChange(image: MarketImage): Int {
         var count = 1
         var moveOn = false
@@ -97,7 +102,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
             currentUser.value?.birthImage?.SNP!!.change
         )
         var imageChangeSorted = imageChange.sorted()
-        selfChangeSorted = selfChange.sorted()
+        var selfChangeSorted = selfChange.sorted()
         for(k in 0..3){
             if(imageChange.get(k) == imageChangeSorted.get(0) && selfChange.get(k) == selfChangeSorted.get(0))
                 moveOn = true
@@ -153,7 +158,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
         var imageClose =
             listOf(image.DJI.close, image.FTSE.close, image.NASDAQ.close, image.SNP.close)
         var selfClose = listOf(
-            currentUser.value?.birthImage?.DJI!!.close,
+                    currentUser.value?.birthImage?.DJI!!.close,
             currentUser.value?.birthImage?.FTSE!!.close,
             currentUser.value?.birthImage?.NASDAQ!!.close,
             currentUser.value?.birthImage?.SNP!!.close
@@ -266,10 +271,18 @@ class UserViewModel : ViewModel(), ValueEventListener {
         firebase.value?.child("users")?.child(user.username)?.setValue(user)
     }
 
-    fun determineSign(date:String):String {
+    fun determineSign(image: MarketImage):String {
         // TODO Rachey! Pop off queen!
-
-        return ""
+        var selfChangeGlobal = sortedChange(image)
+        var sign = selfChangeGlobal.get(0).symbol
+        if(sign == "FTSE")
+            return "FTSE-o"
+        else if(sign == "DJI")
+            return "Dow Jones-ces"
+        else if(sign == "GSPTSE")
+            return "SNP-isces"
+        else
+            return "NASDAQ-rius"
     }
 
     fun editUserInfo(name: String?, bio: String?, image:Bitmap?){
