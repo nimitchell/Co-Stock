@@ -27,22 +27,22 @@ class APIManager(val userViewModel: UserViewModel) {
         //different functions for different indices
         @GET("api/v3/historical-price-full/%5EFTSE?")
         fun getFTSE(
-            @Query("api_key") api_key: String
+            @Query("apikey") api_key: String
         ): Call<ResponseBody>
 
         @GET("api/v3/historical-price-full/%5EDJI?")
         fun getDJI(
-            @Query("api_key") api_key: String
+            @Query("apikey") api_key: String
         ): Call<ResponseBody>
 
         @GET("api/v3/historical-price-full/%5EGSPTSE?")
         fun getSNP(
-            @Query("api_key") api_key: String
+            @Query("apikey") api_key: String
         ): Call<ResponseBody>
 
         @GET("api/v3/historical-price-full/%5EIXIC?")
         fun getNASDAQ(
-            @Query("api_key") api_key: String
+            @Query("apikey") api_key: String
         ): Call<ResponseBody>
     }
 
@@ -52,17 +52,20 @@ class APIManager(val userViewModel: UserViewModel) {
         val hist = data.getJSONArray("historical")
         for (i in 0 until hist.length()){
             val cur = hist.getJSONObject(i)
-            if(cur.getString("date").substring(5) == date.substring(5))
-            image.symbol = cur.getString("symbol")
-            image.date = cur.getString("date")
-            image.open = cur.getDouble("open").toFloat()
-            image.high = cur.getDouble("high").toFloat()
-            image.low = cur.getDouble("low").toFloat()
-            image.close = cur.getDouble("close").toFloat()
-            image.change = cur.getDouble("change").toFloat()
-            image.changePercent = cur.getDouble("change_percent").toFloat()
-            image.changeOverTime = cur.getDouble("change_over_time").toFloat()
-            userViewModel.updateMI(image.symbol, image)
+            Log.d("date1",cur.getString("date").substring(5))
+            Log.d("date2", date.substring(5))
+            if(cur.getString("date").substring(5) == date.substring(5)) {
+                image.symbol = data.getString("symbol")
+                image.date = cur.getString("date")
+                image.open = cur.getDouble("open").toFloat()
+                image.high = cur.getDouble("high").toFloat()
+                image.low = cur.getDouble("low").toFloat()
+                image.close = cur.getDouble("close").toFloat()
+                image.change = cur.getDouble("change").toFloat()
+                image.changePercent = cur.getDouble("changePercent").toFloat()
+                image.changeOverTime = cur.getDouble("changeOverTime").toFloat()
+                userViewModel.updateMI(image.symbol, image)
+            }
         }
     }
 

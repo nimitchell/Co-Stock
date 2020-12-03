@@ -276,10 +276,10 @@ class UserViewModel : ViewModel(), ValueEventListener {
 
     fun updateMI(symbol:String, image: IndexImage) {
         when(symbol) {
-            "FTSE" -> currentUser.value?.birthImage?.FTSE = image
-            "DJI" -> currentUser.value?.birthImage?.DJI = image
-            "GSPTSE" -> currentUser.value?.birthImage?.SNP = image
-            else     -> currentUser.value?.birthImage?.NASDAQ = image
+            "^FTSE" -> firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("birthImage")?.child("ftse")?.setValue(image)
+            "^DJI" -> firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("birthImage")?.child("dji")?.setValue(image)
+            "^GSPTSE" -> firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("birthImage")?.child("snp")?.setValue(image)
+            else     -> firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("birthImage")?.child("nasdaq")?.setValue(image)
             }
         }
 
@@ -287,15 +287,19 @@ class UserViewModel : ViewModel(), ValueEventListener {
         val image = currentUser.value?.birthImage!!
         var selfChangeGlobal = sortedChange(image)
         var sign = selfChangeGlobal.get(0).symbol
-        if(sign == "FTSE")
+        Log.d("sign", sign)
+        if(sign == "^FTSE")
             currentUser.value?.sign =  "FTSE-o"
-        else if(sign == "DJI")
+        else if(sign == "^DJI")
             currentUser.value?.sign = "Dow Jones-ces"
-        else if(sign == "GSPTSE")
+        else if(sign == "^GSPTSE")
             currentUser.value?.sign = "SNP-isces"
-        else
+        else if(sign == "^NASDAQ")
             currentUser.value?.sign = "NASDAQ-rius"
+        else
+            currentUser.value?.sign = "failed"
         currentUser.postValue(currentUser.value)
+
     }
 
     fun editUserInfo(name: String?, bio: String?, image:Bitmap?){
