@@ -23,6 +23,13 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        viewModel.currentUser.observe(viewLifecycleOwner, {
+            userName_textView.text = viewModel.currentUser.value?.name
+            userBio_textView.text = viewModel.currentUser.value?.bio
+        })
+
         //profile_img.setImageBitmap(viewModel.currentUser.value?.profilePic)
         Log.d("homefrag", viewModel.toString())
         Log.d("homefrag", viewModel.currentUser.value.toString())
@@ -57,11 +64,6 @@ class HomeFragment : Fragment() {
         dailyReport_button.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_dailyReportFragment)
         }
-
-        viewModel.currentUser.observe(viewLifecycleOwner, {
-            userName_textView.text = viewModel.currentUser.value?.name
-            userBio_textView.text = viewModel.currentUser.value?.bio
-        })
     }
 
     override fun onCreateView(
