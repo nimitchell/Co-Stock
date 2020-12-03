@@ -1,5 +1,9 @@
 package com.example.co_stock
 
+import android.app.Activity
+import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,15 +21,30 @@ import kotlinx.android.synthetic.main.fragment_edit.*
 class EditFragment : Fragment() {
 
     val viewModel: UserViewModel by activityViewModels<UserViewModel>()
+    var nameEdit: String? = null
+    var bioEdit: String? = null
+    var picEdit: Bitmap? = null
 
     override fun onPause() {
         super.onPause()
-        // TODO change from imgView to photoapp template thing
-        viewModel.editUserInfo(name_editText.text.toString(), bio_editText.text.toString(), null)
+        // TODO maybe don't need bitMap in editUserInfo
+        if (name_editText.text.isNotEmpty()) {
+            nameEdit = name_editText.text.toString()
+        }
+        if (editHome_textView.text.isNotEmpty()) {
+            bioEdit = bio_editText.text.toString()
+        }
+        viewModel.editUserInfo(nameEdit, bioEdit, picEdit)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        profile_img.setOnClickListener {
+            val intent= Intent(Intent.ACTION_PICK)
+            intent.type="image/*"
+            startActivityForResult(intent, 0)
+        }
 
         save_button.setOnClickListener {
             findNavController().popBackStack()
@@ -38,5 +57,17 @@ class EditFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_edit, container, false)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode== Activity.RESULT_OK && requestCode==0){
+            val inputURI=data?.data
+            inputURI?.let {
+                val imageStream = activity?.contentResolver?.openInputStream(it)
+                val selectBitmap = BitmapFactory.decodeStream(imageStream)
+                viewModel.setImage(viewModel.currentUser.value!!.profilePic, selectBitmap)
+            }
+        }
     }
 }

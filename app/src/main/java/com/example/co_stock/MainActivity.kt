@@ -1,5 +1,7 @@
 package com.example.co_stock
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
@@ -12,9 +14,12 @@ import com.google.firebase.database.FirebaseDatabase
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import com.google.android.gms.common.api.internal.ApiKey
 import com.google.firebase.storage.FirebaseStorage
+import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,7 +39,39 @@ class MainActivity : AppCompatActivity() {
         viewModel.firebase.value = FirebaseDatabase.getInstance(app).reference
         viewModel.firebase.value?.addValueEventListener(viewModel)
 
+        if (!checkPermission()) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                ),
+                100
+            )
         }
+    }
+
+    fun checkPermission(): Boolean {
+        val fineLocPermission = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        )
+        return fineLocPermission == PackageManager.PERMISSION_GRANTED
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (grantResults.isEmpty() ||
+            grantResults[0] == PackageManager.PERMISSION_DENIED
+        ) {
+            finish()
+            exitProcess(0)
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.menu, menu)
