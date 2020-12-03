@@ -326,7 +326,6 @@ class UserViewModel : ViewModel(), ValueEventListener {
                     currentUser.postValue(user)
                 }
             }
-
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.d("error", databaseError.getMessage())
             }
