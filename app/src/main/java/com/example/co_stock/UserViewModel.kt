@@ -419,6 +419,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
                 // update current user
                 if(it.email == userAuth.value?.email) {
                     Log.d("onDataChange", it.username)
+                    currentUser.value = it
                     tmpUser = it
                 }
                 // update friends list

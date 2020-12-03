@@ -52,8 +52,6 @@ class APIManager(val userViewModel: UserViewModel) {
         val hist = data.getJSONArray("historical")
         for (i in 0 until hist.length()){
             val cur = hist.getJSONObject(i)
-            Log.d("date1",cur.getString("date").substring(5))
-            Log.d("date2", date.substring(5))
             if(cur.getString("date").substring(5) == date.substring(5)) {
                 image.symbol = data.getString("symbol")
                 image.date = cur.getString("date")
