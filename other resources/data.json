@@ -29,5 +29,17 @@
 		"3" : {"rating" : 3, "personality":"Sheep", "message" : "While not out to get you, you may lack common ground as a wolf."},
 		"4" : {"rating" : 4, "personality":"Stag", "message" : "Consistent and reliable. You can count on this person to always be on the up."},
 		"5" : {"rating" : 5, "personality":"Midas", "message" : "Everything they touch turns to Gold! This person should make a great buissness partner"}
+	},
+	"sign_descriptions" : {
+		"sun" : "This sign shows who you are at your core. This is your most stable and comfortable state.",
+		"rising" : "This sign holds the most positive qualities you can aqure at your fullest potential.",
+		"rival" : "This sign holds the most negative qualities you have to fight against in your most vulnerable states.",
+		"moon" : "This is the sign you will benefit most form observing and understanding their perspectives on the world."
+	},
+	"index_descriptions" : {
+		"dow_jones" : "This sign is populated by natural leaders. Their independent and influential nature leads many people to look to them for advice and guidance. However, this sign is vulnerable to being overconfident and letting their influence on others get to their heads.",
+		"s&p" : "This sign is full of very dependable and trustworthy people. But because they value their reliability it could lead them to be over-cautious in life and unhealthy perfectionists.",
+		"nasdaq" : "The people of this sign are uniquely intelligent. They love taking in new information from anything they come across. However, this sign is also very exclusive with the people they let into their inner circle and they also have a vulnerability of co-dependence.",
+		"ftse" : "The people of this sign are very loyal to others. Thay also usually find great passion in their trade. But their focus of these attributes usually also leads to them not prioritizing their own health or wellbeing."
 	}
 }
