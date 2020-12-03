@@ -50,6 +50,7 @@ class SignInFragment : Fragment() {
                             val user = auth.currentUser
                             viewModel.updateAuth(user!!)
                             viewModel.getUserByName(user.email!!)
+                            Log.d("Signin", viewModel.currentUser.value?.username.toString()!!)
                             findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
                         }
                         else {

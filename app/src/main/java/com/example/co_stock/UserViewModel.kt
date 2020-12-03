@@ -323,7 +323,8 @@ class UserViewModel : ViewModel(), ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (ds in dataSnapshot.children) {
                     val user = ds.getValue(User::class.java)
-                    currentUser.postValue(user)
+                    currentUser.value = user
+                    Log.d("getUserByName", currentUser.value?.username!!)
                 }
             }
             override fun onCancelled(databaseError: DatabaseError) {
@@ -394,7 +395,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
                 // update current user
                 if(it.email == userAuth.value?.email) {
                     Log.d("onDataChange", it.username)
-                    currentUser.postValue(it)
+                    currentUser.value =it
                 }
                 // update friends list
                 else if (currentUser.value?.friends?.contains(it.username) != null && currentUser.value?.friends?.contains(it.username)!!) {
