@@ -34,7 +34,7 @@ class EditFragment : Fragment() {
         if (editHome_textView.text.isNotEmpty()) {
             bioEdit = bio_editText.text.toString()
         }
-        viewModel.editUserInfo(nameEdit, bioEdit, picEdit)
+        viewModel.editUserInfo(nameEdit, bioEdit)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

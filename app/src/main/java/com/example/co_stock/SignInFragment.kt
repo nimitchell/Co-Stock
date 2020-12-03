@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
@@ -26,7 +27,7 @@ import kotlinx.android.synthetic.main.fragment_sign_in.*
 class SignInFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
-    val viewModel: UserViewModel by viewModels<UserViewModel>()
+    val viewModel: UserViewModel by activityViewModels<UserViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

@@ -302,15 +302,12 @@ class UserViewModel : ViewModel(), ValueEventListener {
 
     }
 
-    fun editUserInfo(name: String?, bio: String?, image:Bitmap?){
-        if (name!= null){
+    fun editUserInfo(name: String?, bio: String?){
+        if (name!= null && name != ""){
             firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("name")?.setValue(name)
         }
         if (bio != null){
             firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("bio")?.setValue(bio)
-        }
-        if (image != null) {
-            firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("profilePic")?.setValue(image)
         }
     }
 
@@ -419,7 +416,6 @@ class UserViewModel : ViewModel(), ValueEventListener {
                 // update current user
                 if(it.email == userAuth.value?.email) {
                     Log.d("onDataChange", it.username)
-                    currentUser.value = it
                     tmpUser = it
                 }
                 // update friends list
