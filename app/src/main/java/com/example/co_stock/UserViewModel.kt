@@ -275,11 +275,11 @@ class UserViewModel : ViewModel(), ValueEventListener {
         // TODO Rachey! Pop off queen!
         var selfChangeGlobal = sortedChange(image)
         var sign = selfChangeGlobal.get(0).symbol
-        if(sign == "FTSE")
+        if(sign == "^FTSE")
             return "FTSE-o"
-        else if(sign == "DJI")
+        else if(sign == "^DJI")
             return "Dow Jones-ces"
-        else if(sign == "GSPTSE")
+        else if(sign == "^GSPTSE")
             return "SNP-isces"
         else
             return "NASDAQ-rius"
@@ -355,7 +355,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
     fun getFriendCompatibility(friend:User): Int {
         //TODO Rachael's work feeds into here
         //compare the friend's market image to yours using compareImages
-        return 0
+        return compareImages(friend.birthImage)
     }
 
     fun getFriendCompatibilityMessage(friend: String, score:Int): String {

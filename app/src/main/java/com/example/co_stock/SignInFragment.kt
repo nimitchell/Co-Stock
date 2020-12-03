@@ -22,14 +22,14 @@ import kotlinx.android.synthetic.main.fragment_sign_in.*
 class SignInFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
-    val viewModel: UserViewModel by viewModels<UserViewModel>()
+            val viewModel: UserViewModel by viewModels<UserViewModel>()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        // Initialize Firebase Auth
-        auth = FirebaseAuth.getInstance()
+            override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+                super.onViewCreated(view, savedInstanceState)
+                // Initialize Firebase Auth
+                auth = FirebaseAuth.getInstance()
 
-        login_button.setOnClickListener {
+                login_button.setOnClickListener {
             val username = login_username.text.toString()
             val password = login_password.text.toString()
 
