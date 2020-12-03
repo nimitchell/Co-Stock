@@ -32,7 +32,7 @@ class SignInFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // Initialize Firebase Auth
         auth = FirebaseAuth.getInstance()
-        var done = false
+
         login_button.setOnClickListener {
             val username = login_username.text.toString()
             val password = login_password.text.toString()
