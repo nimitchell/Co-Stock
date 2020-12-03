@@ -5,6 +5,8 @@ import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -20,6 +22,7 @@ import kotlin.collections.ArrayList
 
 class UserViewModel : ViewModel(), ValueEventListener {
 
+    val apiManager = MutableLiveData<APIManager>()          // apiManager
     var firebase = MutableLiveData<DatabaseReference>()
     var currentUser = MutableLiveData<User>()
     var currentFriend = MutableLiveData<User>()
@@ -38,6 +41,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
         firebase.value?.addValueEventListener(this)
         storage.value = FirebaseStorage.getInstance().getReference("images")
         currentUser.value = User()
+        apiManager.value = APIManager(this)
     }
 
     fun setImage(name: String, image:Bitmap){
@@ -80,9 +84,6 @@ class UserViewModel : ViewModel(), ValueEventListener {
         userAuth.value = user
     }
 
-    fun updateUserData() {
-        // TODO maybe uneeded?
-    }
 
     fun sortedChange(image: MarketImage): List<IndexImage>{
         var selfChangeSort = listOf(image.FTSE, image.DJI, image.SNP, image.NASDAQ)
@@ -267,22 +268,34 @@ class UserViewModel : ViewModel(), ValueEventListener {
 
     fun addUser(user:User){
         currentUser.value = user
-        Log.d("addUser", currentUser.value?.username!!)
-        firebase.value?.child("users")?.child(user.username)?.setValue(user)
+        apiManager.value?.fetchImage(user.birthday)
+        determineSign()
+        Log.d("addUser", currentUser.value?.sign!!)
+        firebase.value?.child("users")?.child(user.username)?.setValue(currentUser.value)
     }
 
-    fun determineSign(image: MarketImage):String {
-        // TODO Rachey! Pop off queen!
+    fun updateMI(symbol:String, image: IndexImage) {
+        when(symbol) {
+            "FTSE" -> currentUser.value?.birthImage?.FTSE = image
+            "DJI" -> currentUser.value?.birthImage?.DJI = image
+            "GSPTSE" -> currentUser.value?.birthImage?.SNP = image
+            else     -> currentUser.value?.birthImage?.NASDAQ = image
+            }
+        }
+
+    fun determineSign(){
+        val image = currentUser.value?.birthImage!!
         var selfChangeGlobal = sortedChange(image)
         var sign = selfChangeGlobal.get(0).symbol
         if(sign == "FTSE")
-            return "FTSE-o"
+            currentUser.value?.sign =  "FTSE-o"
         else if(sign == "DJI")
-            return "Dow Jones-ces"
+            currentUser.value?.sign = "Dow Jones-ces"
         else if(sign == "GSPTSE")
-            return "SNP-isces"
+            currentUser.value?.sign = "SNP-isces"
         else
-            return "NASDAQ-rius"
+            currentUser.value?.sign = "NASDAQ-rius"
+        currentUser.postValue(currentUser.value)
     }
 
     fun editUserInfo(name: String?, bio: String?, image:Bitmap?){
@@ -315,7 +328,12 @@ class UserViewModel : ViewModel(), ValueEventListener {
                 ?.setValue(currentUser.value?.friends)
         }
     }
+    fun setUser(user:User) {
+        currentUser.value = user
+        currentUser.postValue(currentUser.value)
+    }
 
+    // TODO remove later
     fun getUserByName(email:String) {
         val dbRef = firebase.value
         val userRef = dbRef?.child("users")?.orderByChild("email")?.equalTo(email)
@@ -324,6 +342,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
                 for (ds in dataSnapshot.children) {
                     val user = ds.getValue(User::class.java)
                     currentUser.value = user
+                    currentUser.postValue(currentUser.value)
                     Log.d("getUserByName", currentUser.value?.username!!)
                 }
             }
@@ -356,7 +375,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
     fun getFriendCompatibility(friend:User): Int {
         //TODO Rachael's work feeds into here
         //compare the friend's market image to yours using compareImages
-        return 0
+        return compareImages(friend.birthImage)
     }
 
     fun getFriendCompatibilityMessage(friend: String, score:Int): String {
@@ -374,7 +393,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
         return dailyMessage.value?.get(score)!!
     }
 
-    fun getIndexScore(stock:String): Int{
+    fun getIndexScore(index:String): Int{
         return 0
     }
 
@@ -389,13 +408,14 @@ class UserViewModel : ViewModel(), ValueEventListener {
 
     override fun onDataChange(snapshot: DataSnapshot) {
         var tmpFriends = ArrayList<User>()
+        var tmpUser = currentUser.value
         // get users
         snapshot.child("users").children.forEach {
             it.getValue(User::class.java)?.let {
                 // update current user
                 if(it.email == userAuth.value?.email) {
                     Log.d("onDataChange", it.username)
-                    currentUser.value =it
+                    tmpUser = it
                 }
                 // update friends list
                 else if (currentUser.value?.friends?.contains(it.username) != null && currentUser.value?.friends?.contains(it.username)!!) {
@@ -403,6 +423,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
                 }
             }
         }
+        currentUser.postValue(tmpUser)
         friends.postValue(tmpFriends)
 
         // get quotes

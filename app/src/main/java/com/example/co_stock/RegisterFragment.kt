@@ -94,13 +94,12 @@ class RegisterFragment : Fragment() {
                             val user = auth.currentUser
                             viewModel.updateAuth(user!!)
                             var date = "${reg_calenderView.year}-${reg_calenderView.month}-${reg_calenderView.dayOfMonth}"
+
                             viewModel.addUser(User(username,
-                                email = user.email.toString(),
-                                birthday = date,
-                                sign = viewModel.determineSign(date),
-                                birthImage = MarketImage(),
-                                profilePic = "${username}.png"
-                                ))
+                            email = user.email.toString(),
+                            birthday = date,
+                            profilePic = "${username}.png"
+                            ))
                             viewModel.setImage("${username}.png", BitmapFactory.decodeResource(resources, R.drawable.baseline_person_outline_black_48dp))
                             findNavController().navigate(R.id.action_registerFragment_to_homeFragment)
                         } else {

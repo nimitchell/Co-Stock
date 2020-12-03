@@ -1,7 +1,8 @@
 package com.example.co_stock
 
-data class MarketImage(val FTSE: IndexImage = IndexImage(),
-                       val DJI: IndexImage = IndexImage(),
-                       val SNP: IndexImage = IndexImage(),
-                       val NASDAQ: IndexImage = IndexImage()) {
+data class MarketImage(var FTSE: IndexImage = IndexImage(),
+                       var DJI: IndexImage = IndexImage(),
+                       var SNP: IndexImage = IndexImage(),
+                       var NASDAQ: IndexImage = IndexImage()
+){
 }

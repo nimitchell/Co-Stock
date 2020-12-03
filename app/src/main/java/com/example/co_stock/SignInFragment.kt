@@ -11,6 +11,10 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_register.*
 import kotlinx.android.synthetic.main.fragment_sign_in.*
 
@@ -28,7 +32,7 @@ class SignInFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         // Initialize Firebase Auth
         auth = FirebaseAuth.getInstance()
-
+        var done = false
         login_button.setOnClickListener {
             val username = login_username.text.toString()
             val password = login_password.text.toString()
@@ -47,11 +51,29 @@ class SignInFragment : Fragment() {
                         if (task.isSuccessful) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("Success", "signInWithEmailAndPassword:success")
-                            val user = auth.currentUser
-                            viewModel.updateAuth(user!!)
-                            viewModel.getUserByName(user.email!!)
-                            Log.d("Signin", viewModel.currentUser.value?.username.toString()!!)
-                            findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
+                            val user = auth.currentUser!!
+                            viewModel.updateAuth(user)
+                            //viewModel.getUserByName()
+                            lateinit var dbRef: DatabaseReference
+                            viewModel.firebase.observe(viewLifecycleOwner, {
+                                dbRef = it
+                            })
+                            val userRef = dbRef?.child("users")?.orderByChild("email")?.equalTo(user.email!!)
+                            val valueEventListener = object : ValueEventListener {
+                                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                                    for (ds in dataSnapshot.children) {
+                                        val user = ds.getValue(User::class.java)
+                                        viewModel.setUser(user!!)
+                                        Log.d("getUserByName", viewModel.currentUser.value?.username!!)
+                                        findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
+                                    }
+                                }
+                                override fun onCancelled(databaseError: DatabaseError) {
+                                    Log.d("error", databaseError.getMessage())
+                                }
+                            }
+                            userRef?.addListenerForSingleValueEvent(valueEventListener)
+
                         }
                         else {
                             // If sign in fails, display a message to the user.
@@ -62,6 +84,7 @@ class SignInFragment : Fragment() {
                     }
             }
         }
+
         signUp_text.setOnClickListener {
             findNavController().navigate(R.id.action_signInFragment_to_registerFragment)
         }

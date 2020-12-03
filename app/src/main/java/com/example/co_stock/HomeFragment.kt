@@ -23,20 +23,16 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         viewModel.currentUser.observe(viewLifecycleOwner, {
-            userName_textView.text = viewModel.currentUser.value?.name
-            userBio_textView.text = viewModel.currentUser.value?.bio
+            Log.d("homefrag obs", it.toString())
+            userName_textView.text = it.name
+            userBio_textView.text = it.bio
+            userSign_textView.text = it.sign
+            //profile_img.setImageBitmap(viewModel.getProfileImage(it.profilePic!!))
         })
 
-        //profile_img.setImageBitmap(viewModel.currentUser.value?.profilePic)
-        Log.d("homefrag", viewModel.toString())
-        Log.d("homefrag", viewModel.currentUser.value.toString())
-
-        userName_textView.text = viewModel.currentUser.value?.name
-        userSign_textView.text = viewModel.currentUser.value?.sign
-        userBio_textView.text = viewModel.currentUser.value?.bio
-        //profile_img.setImageBitmap(viewModel.getProfileImage(viewModel.currentUser.value?.profilePic!!))
+        //Log.d("homefrag", viewModel.toString())
+        //Log.d("homefrag", viewModel.currentUser.value.toString())
 
         // TODO need to set the text once getting signs is figured out
         userSign_tableText.text = viewModel.currentUser.value?.sign
