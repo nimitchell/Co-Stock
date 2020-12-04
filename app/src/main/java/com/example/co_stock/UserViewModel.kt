@@ -381,6 +381,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
                 counter = 0
                 snapshot.child("index_message").children.forEach {
                     it.getValue(String::class.java)?.let {
+                        Log.d("index_message", it)
                         counter++
                         tmpIndex[counter] = it
                     }
@@ -453,7 +454,6 @@ class UserViewModel : ViewModel(), ValueEventListener {
     }
 
     fun calculateDailyScore(): Int {
-        // TODO Rachey
         return compareImages(dailyImage.value!!)
     }
 
@@ -464,10 +464,13 @@ class UserViewModel : ViewModel(), ValueEventListener {
     }
 
     fun getIndexScore(index:String): Int{
-        return 0
+        // TODO Rachael: write code that determins if the daily image for this stock is good or bad (might just check if change is positive or negative turn it into 1-5
+        return 1
     }
 
     fun getIndexReport(score:Int) : String{
+        Log.d("getIndexReport", indexMessage.value.toString())
+        Log.d("score", score.toString())
         return indexMessage.value?.get(score)!!
     }
 
@@ -521,6 +524,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
         counter = 0
         snapshot.child("index_message").children.forEach {
             it.getValue(String::class.java)?.let {
+                Log.d("index_message", it)
                 counter++
                 tmpIndex[counter] = it
             }
