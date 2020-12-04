@@ -1,5 +1,8 @@
 package com.example.co_stock
 
+import android.app.PendingIntent.getActivity
+import android.content.res.Resources
+import android.provider.Settings.Global.getString
 import android.util.Log
 import androidx.core.content.res.TypedArrayUtils.getString
 import com.example.co_stock.UserViewModel
@@ -13,9 +16,9 @@ import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-class APIManager(val userViewModel: UserViewModel) {
+class APIManager(val userViewModel: UserViewModel, API_KEY: String) {
     private val apiURL = "https://financialmodelingprep.com/"
-    private val apiKey = "abe86a7e029d4e80007fb927cc8ca733"
+    private val apiKey = API_KEY
 
     val retrofit = Retrofit.Builder()
         .baseUrl(apiURL)
@@ -75,6 +78,8 @@ class APIManager(val userViewModel: UserViewModel) {
             val cur = hist.getJSONObject(i)
             if(cur.getString("date").substring(5) == date.substring(5)) {
                 image.symbol = data.getString("symbol")
+                if (data.getString("symbol") == "^GSPTSE")
+                    image.symbol = "^GSPC"
                 image.date = cur.getString("date")
                 image.open = cur.getDouble("open").toFloat()
                 image.high = cur.getDouble("high").toFloat()
@@ -148,6 +153,7 @@ class APIManager(val userViewModel: UserViewModel) {
         Callback<ResponseBody> {
         val date = date
         override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            throw t
         }
 
         override fun onResponse(

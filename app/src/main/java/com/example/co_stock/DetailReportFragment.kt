@@ -22,14 +22,17 @@ class DetailReportFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val indexScore = viewModel.getIndexScore(viewModel.currentIndex.value!!)
-        index_textView.text = viewModel.currentIndex.value!!
+        index_textView.text = viewModel.getIndexName(viewModel.currentIndex.value?.symbol!!)
         indexScore_text.text = indexScore.toString()
-
         var color = 0
         when(indexScore){
-            1 -> color = getResources().getColor(R.color.red)
-            2 -> color = getResources().getColor(R.color.red)
+            1 -> color = resources.getColor(R.color.red)
+            2 -> color = resources.getColor(R.color.orange)
+            3 -> color = resources.getColor(R.color.yellow)
+            4 -> color = resources.getColor(R.color.green_yellow)
+            5 -> color = resources.getColor(R.color.green)
         }
+        indexScore_text.setTextColor(color)
         indexReport_text.text = viewModel.getIndexReport(indexScore)
     }
 

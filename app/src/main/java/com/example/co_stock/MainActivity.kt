@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.firebase.value = FirebaseDatabase.getInstance(app).reference
         viewModel.firebase.value?.addValueEventListener(viewModel)
+        viewModel.apiManager.value = APIManager(viewModel, getString(R.string.stockmarket_api_key))
 
 
         if (!checkPermission()) {

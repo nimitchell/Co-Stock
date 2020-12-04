@@ -24,6 +24,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
         android:text="Sign/Index Name"
+        android:textAlignment="center"
         android:textColor="@color/colorSecondary"
         android:textSize="24sp" />
 
@@ -33,9 +34,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="20dp"
-        android:text="Comparison with Birthday Index Position"
+        android:text="Today's Score:"
         android:textColor="@color/colorTextPrimary"
-        android:textSize="15sp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/indexScore_text"
@@ -55,5 +56,6 @@
         android:layout_marginTop="20dp"
         android:text="Index Report"
         android:textColor="@color/colorTextPrimary"
-        android:textSize="15sp" />
+        android:textSize="15sp"
+        android:textAlignment="center"/>
 </LinearLayout>

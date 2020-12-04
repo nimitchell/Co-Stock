@@ -2,6 +2,7 @@ package com.example.co_stock
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -29,38 +30,45 @@ class DailyReportFragment : Fragment() {
 
         val current = LocalDateTime.now()
 
+
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val formatted = current.format(formatter)
-        viewModel.apiManager?.value?.fetchDailyImage(formatted)
-
+        if (viewModel.dailyImage.value != null && viewModel.dailyImage.value?.DJI?.date != formatted) {
+            viewModel.apiManager?.value?.fetchDailyImage(formatted)
+        }
 
 
         val dailyScore = viewModel.calculateDailyScore()
         quote_textView.text = viewModel.getRandomQuote()
         dailyReport_text.text = viewModel.getDailyReport(dailyScore)
 
-        // TODO get the diff indecies
-        firstIndex_button.text = ""
-        secondIndex_button.text = ""
-        thirdIndex_button.text = ""
-        fourthIndex_button.text = ""
-
-        firstIndex_button.setOnClickListener {
-            viewModel.currentIndex.value = ""
-            findNavController().navigate(R.id.action_dailyReportFragment_to_detailReportFragment)
-        }
-        secondIndex_button.setOnClickListener {
-            viewModel.currentIndex.value = ""
-            findNavController().navigate(R.id.action_dailyReportFragment_to_detailReportFragment)
-        }
-        thirdIndex_button.setOnClickListener {
-            viewModel.currentIndex.value = ""
-            findNavController().navigate(R.id.action_dailyReportFragment_to_detailReportFragment)
-        }
-        fourthIndex_button.setOnClickListener {
-            viewModel.currentIndex.value = ""
-            findNavController().navigate(R.id.action_dailyReportFragment_to_detailReportFragment)
-        }
+        viewModel.dailyImage.observe(viewLifecycleOwner, {
+            Log.d("DJI", it.DJI.symbol)
+            firstIndex_button.text = viewModel.getIndexName(it.DJI.symbol)
+            Log.d("FTSE", it.FTSE.symbol)
+            secondIndex_button.text = viewModel.getIndexName(it.FTSE.symbol)
+            Log.d("NASDAQ", it.NASDAQ.symbol)
+            thirdIndex_button.text = viewModel.getIndexName(it.NASDAQ.symbol)
+            Log.d("SNP", it.SNP.symbol)
+            fourthIndex_button.text = viewModel.getIndexName(it.SNP.symbol)
+            val cur_img = it
+            firstIndex_button.setOnClickListener {
+                viewModel.currentIndex.value = cur_img.DJI
+                findNavController().navigate(R.id.action_dailyReportFragment_to_detailReportFragment)
+            }
+            secondIndex_button.setOnClickListener {
+                viewModel.currentIndex.value = cur_img.FTSE
+                findNavController().navigate(R.id.action_dailyReportFragment_to_detailReportFragment)
+            }
+            thirdIndex_button.setOnClickListener {
+                viewModel.currentIndex.value = cur_img.NASDAQ
+                findNavController().navigate(R.id.action_dailyReportFragment_to_detailReportFragment)
+            }
+            fourthIndex_button.setOnClickListener {
+                viewModel.currentIndex.value = cur_img.SNP
+                findNavController().navigate(R.id.action_dailyReportFragment_to_detailReportFragment)
+            }
+        })
     }
 
     override fun onCreateView(

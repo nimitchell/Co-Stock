@@ -42,7 +42,6 @@ class UserViewModel : ViewModel(), ValueEventListener {
         storage.value = FirebaseStorage.getInstance().getReference("images")
         currentUser.value = User()
         dailyImage.value = MarketImage()
-        apiManager.value = APIManager(this)
     }
 
     fun setImage(name: String, image:Bitmap){
@@ -68,10 +67,12 @@ class UserViewModel : ViewModel(), ValueEventListener {
     }
 
     fun setDailyImage(symbol:String, image: IndexImage) {
+        Log.d("symbol", symbol)
+        Log.d("image", image.toString())
         when(symbol) {
             "^FTSE" -> dailyImage.value?.FTSE = image
             "^DJI" -> dailyImage.value?.DJI = image
-            "^GSPTSE" -> dailyImage.value?.SNP = image
+            "^GSPC" -> dailyImage.value?.SNP = image
             else     -> dailyImage.value?.NASDAQ = image
         }
         dailyImage.postValue(dailyImage.value)
@@ -263,6 +264,8 @@ class UserViewModel : ViewModel(), ValueEventListener {
         var low = compareImagesLow(image)
         if (low == 0)
             count++
+        if (count == 0)
+            return 1
         return count
     }
 
@@ -277,7 +280,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
         when(symbol) {
             "^FTSE" -> firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("birthImage")?.child("ftse")?.setValue(image)
             "^DJI" -> firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("birthImage")?.child("dji")?.setValue(image)
-            "^GSPTSE" -> firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("birthImage")?.child("snp")?.setValue(image)
+            "^GSPC" -> firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("birthImage")?.child("snp")?.setValue(image)
             else     -> firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("birthImage")?.child("nasdaq")?.setValue(image)
             }
         }
@@ -290,7 +293,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
         when(symbol) {
             "^FTSE" -> sign = "FTSE-o"
             "^DJI" -> sign = "Dow Jones-ces"
-            "^GSPTSE" -> sign = "SNP-isces"
+            "^GSPC" -> sign = "SNP-isces"
             "^IXIC" -> sign = "NASDAQ-rius"
             else     -> sign = ""
         }
@@ -301,7 +304,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
             when(it.symbol) {
                 "^FTSE" -> cur = "FTSE"
                 "^DJI" -> cur = "Dow Jones"
-                "^GSPTSE" -> cur = "SNP"
+                "^GSPC" -> cur = "SNP"
                 "^IXIC" -> cur = "NASDAQ"
                 else     -> cur = ""
             }
@@ -471,15 +474,33 @@ class UserViewModel : ViewModel(), ValueEventListener {
         return dailyMessage.value?.get(score)!!
     }
 
-    fun getIndexScore(index:String): Int{
+    fun getIndexScore(index:IndexImage): Int {
+        Log.d("index", index.symbol)
+        Log.d("change", index.changePercent.toString())
+
         var percentChange: Int
-        if(currentIndex.value?.changePercent!! <= -1)
+        if (index.changePercent!! <= -1)
             percentChange = 1
-        else if(currentIndex.value?.changePercent!! > -1 || currentIndex.value?.changePercent!! < 1)
+        else if (index.changePercent!! < -0.1)
             percentChange = 2
-        else
+        else if (index.changePercent!! >= 1)
+            percentChange = 5
+        else if (index.changePercent!! > 0.1)
+            percentChange = 4
+         else
             percentChange = 3
+
         return percentChange
+    }
+
+    fun getIndexName(index:String): String {
+        when(index) {
+            "^FTSE" -> return "FTSE"
+            "^DJI" -> return "Dow Jones"
+            "^GSPC" -> return "SNP"
+            "^IXIC" -> return "NASDAQ"
+            else     -> return ""
+        }
     }
 
     fun getIndexReport(score:Int) : String{
