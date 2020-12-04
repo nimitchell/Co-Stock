@@ -11,6 +11,7 @@ data class User(val username :String = "",
                 val birthImage:MarketImage = MarketImage(),
                 var name:String = username,
                 var sign:String = "",
+                var signs:List<String> = emptyList(),
                 var bio:String = "",
                 var friends:List<String> = emptyList(),
                 var profilePic: String = username) {

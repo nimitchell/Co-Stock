@@ -12,7 +12,9 @@
     <ImageView
         android:id="@+id/friendProfile_img"
         android:layout_width="100dp"
-        android:layout_height="100dp" />
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"/>
 
     <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="0dp"

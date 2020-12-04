@@ -269,12 +269,11 @@ class UserViewModel : ViewModel(), ValueEventListener {
     fun addUser(user:User){
         currentUser.value = user
         apiManager.value?.fetchImage(user.birthday)
-        determineSign()
-        Log.d("addUser", currentUser.value?.sign!!)
         firebase.value?.child("users")?.child(user.username)?.setValue(currentUser.value)
     }
 
-    fun updateMI(symbol:String, image: IndexImage,) {
+    fun updateMI(symbol:String, image: IndexImage) {
+        Log.d("hello", "working")
         when(symbol) {
             "^FTSE" -> firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("birthImage")?.child("ftse")?.setValue(image)
             "^DJI" -> firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("birthImage")?.child("dji")?.setValue(image)
@@ -286,19 +285,31 @@ class UserViewModel : ViewModel(), ValueEventListener {
     fun determineSign(){
         val image = currentUser.value?.birthImage!!
         var selfChangeGlobal = sortedChange(image)
-        var sign = selfChangeGlobal.get(0).symbol
-        Log.d("sign", sign)
-        if(sign == "^FTSE")
-            currentUser.value?.sign =  "FTSE-o"
-        else if(sign == "^DJI")
-            currentUser.value?.sign = "Dow Jones-ces"
-        else if(sign == "^GSPTSE")
-            currentUser.value?.sign = "SNP-isces"
-        else if(sign == "^NASDAQ")
-            currentUser.value?.sign = "NASDAQ-rius"
-        else
-            currentUser.value?.sign = "failed"
-        currentUser.postValue(currentUser.value)
+        var symbol = selfChangeGlobal.get(0).symbol
+        var sign = ""
+        when(symbol) {
+            "^FTSE" -> sign = "FTSE-o"
+            "^DJI" -> sign = "Dow Jones-ces"
+            "^GSPTSE" -> sign = "SNP-isces"
+            "^IXIC" -> sign = "NASDAQ-rius"
+            else     -> sign = ""
+        }
+        firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("sign")?.setValue(sign)
+        var signs = arrayListOf<String>()
+        selfChangeGlobal.forEach {
+            var cur = ""
+            when(it.symbol) {
+                "^FTSE" -> cur = "FTSE"
+                "^DJI" -> cur = "Dow Jones"
+                "^GSPTSE" -> cur = "SNP"
+                "^IXIC" -> cur = "NASDAQ"
+                else     -> cur = ""
+            }
+            signs.add(cur)}
+        firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("signs")?.setValue(signs)
+
+
+
 
     }
 
@@ -381,7 +392,6 @@ class UserViewModel : ViewModel(), ValueEventListener {
                 counter = 0
                 snapshot.child("index_message").children.forEach {
                     it.getValue(String::class.java)?.let {
-                        Log.d("index_message", it)
                         counter++
                         tmpIndex[counter] = it
                     }
@@ -392,9 +402,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
                 Log.d("error", databaseError.getMessage())
             }
         }
-        Log.d("end", "got here")
         firebase.value?.addListenerForSingleValueEvent(valueEventListener)
-        Log.d("end2", "didn't die")
 
     }
     fun setFriend(user:User) {
@@ -487,7 +495,6 @@ class UserViewModel : ViewModel(), ValueEventListener {
             it.getValue(User::class.java)?.let {
                 // update current user
                 if(it.email == userAuth.value?.email) {
-                    Log.d("onDataChange", it.username)
                     tmpUser = it
                 }
                 // update friends list
@@ -524,7 +531,6 @@ class UserViewModel : ViewModel(), ValueEventListener {
         counter = 0
         snapshot.child("index_message").children.forEach {
             it.getValue(String::class.java)?.let {
-                Log.d("index_message", it)
                 counter++
                 tmpIndex[counter] = it
             }

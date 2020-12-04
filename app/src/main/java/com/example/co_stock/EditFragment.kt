@@ -5,13 +5,16 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_edit.*
+import kotlinx.android.synthetic.main.fragment_home.*
 
 /**
  * A simple [Fragment] subclass.
@@ -40,7 +43,26 @@ class EditFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        profile_img.setOnClickListener {
+        var picName = ""
+        viewModel.currentUser.observe(viewLifecycleOwner, {
+            name_editText.setText(it.name)
+            bio_editText.setText(it.bio)
+            picName = it.profilePic!!
+        })
+        viewModel.storage.observe(viewLifecycleOwner, {
+            var imageRef = it.child(picName)
+            val ONE_MEGABYTE: Long = 1024 * 1024
+            imageRef?.getBytes(ONE_MEGABYTE)?.addOnSuccessListener {
+                // Data for "images/island.jpg" is returned, use this as needed
+                edit_profile_img.setImageBitmap(BitmapFactory.decodeByteArray(it,0, it.size))
+            }?.addOnFailureListener {
+                // Handle any errors
+                throw it
+            }
+        })
+
+
+        edit_profile_img.setOnClickListener {
             val intent= Intent(Intent.ACTION_PICK)
             intent.type="image/*"
             startActivityForResult(intent, 0)
@@ -67,6 +89,8 @@ class EditFragment : Fragment() {
                 val imageStream = activity?.contentResolver?.openInputStream(it)
                 val selectBitmap = BitmapFactory.decodeStream(imageStream)
                 viewModel.setImage(viewModel.currentUser.value!!.profilePic, selectBitmap)
+                edit_profile_img.setImageBitmap(selectBitmap)
+
             }
         }
     }

@@ -22,9 +22,11 @@
             android:textSize="30sp" />
 
         <ImageView
-            android:id="@+id/profile_img"
+            android:id="@+id/edit_profile_img"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:adjustViewBounds="true"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="50dp"/>
 
