@@ -56,6 +56,6 @@
         android:layout_marginTop="20dp"
         android:text="Index Report"
         android:textColor="@color/colorTextPrimary"
-        android:textSize="15sp"
+        android:textSize="20sp"
         android:textAlignment="center"/>
 </LinearLayout>

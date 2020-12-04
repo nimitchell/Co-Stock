@@ -28,6 +28,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="Name"
+            android:layout_marginLeft="8dp"
             android:textColor="@color/colorTextPrimary"
             android:textSize="25sp" />
 
@@ -37,6 +38,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:text="Sign"
+            android:layout_marginLeft="8dp"
             android:textColor="@color/colorSecondary"
             android:textSize="18sp"/>
     </androidx.appcompat.widget.LinearLayoutCompat>

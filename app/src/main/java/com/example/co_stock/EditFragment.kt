@@ -49,16 +49,8 @@ class EditFragment : Fragment() {
             bio_editText.setText(it.bio)
             picName = it.profilePic!!
         })
-        viewModel.storage.observe(viewLifecycleOwner, {
-            var imageRef = it.child(picName)
-            val ONE_MEGABYTE: Long = 1024 * 1024
-            imageRef?.getBytes(ONE_MEGABYTE)?.addOnSuccessListener {
-                // Data for "images/island.jpg" is returned, use this as needed
-                edit_profile_img.setImageBitmap(BitmapFactory.decodeByteArray(it,0, it.size))
-            }?.addOnFailureListener {
-                // Handle any errors
-                throw it
-            }
+        viewModel.profilePic.observe(viewLifecycleOwner, {
+            edit_profile_img.setImageBitmap(it)
         })
 
 
@@ -89,7 +81,8 @@ class EditFragment : Fragment() {
                 val imageStream = activity?.contentResolver?.openInputStream(it)
                 val selectBitmap = BitmapFactory.decodeStream(imageStream)
                 viewModel.setImage(viewModel.currentUser.value!!.profilePic, selectBitmap)
-                edit_profile_img.setImageBitmap(selectBitmap)
+                viewModel.profilePic.postValue(selectBitmap)
+                //edit_profile_img.setImageBitmap(selectBitmap)
 
             }
         }
