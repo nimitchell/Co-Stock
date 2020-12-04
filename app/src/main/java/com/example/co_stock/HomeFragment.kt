@@ -51,15 +51,17 @@ class HomeFragment : Fragment() {
             if (it.sign == "")
                 viewModel.determineSign()
             userSign_textView.text = it.sign
-            userSign_tableText.text = it.signs.get(0)
-            userRising_tableText.text = it.signs.get(1)
-            userRival_tableText.text = it.signs.get(2)
-            userMoon_tableText.text = it.signs.get(3)
+            if(!it.signs.isEmpty()) {
+                userSign_tableText.text = it.signs.get(0)
+                userRising_tableText.text = it.signs.get(1)
+                userRival_tableText.text = it.signs.get(2)
+                userMoon_tableText.text = it.signs.get(3)
 
-            userSignText.text = it.signs.get(0)
-            userRisingText.text = it.signs.get(1)
-            userRivalText.text = it.signs.get(2)
-            userMoonText.text = it.signs.get(3)
+                userSignText.text = it.signs.get(0)
+                userRisingText.text = it.signs.get(1)
+                userRivalText.text = it.signs.get(2)
+                userMoonText.text = it.signs.get(3)
+            }
         })
         viewModel.storage.observe(viewLifecycleOwner, {
             var imageRef = it.child(picName)

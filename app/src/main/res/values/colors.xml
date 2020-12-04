@@ -10,4 +10,7 @@
     <color name="colorTextSecondary">#FFFFFF</color>
     <color name="colorTextHint">#99F44336</color>
     <color name="grey">#a3a3a3</color>
+    <color name="green">#19d400</color>
+    <color name="yellow">#FFE500</color>
+    <color name="red">#FF0000</color>
 </resources>

@@ -116,15 +116,15 @@ class APIManager(val userViewModel: UserViewModel) {
         call4.enqueue(ImageCallback(date))
     }
 
-    fun fetchDailyImage(date: String, count:Int = 0) {
+    fun fetchDailyImage(date: String) {
         val call = service.getDailyFTSE(apiKey)
-        call.enqueue(DailyCallback(date, count))
+        call.enqueue(DailyCallback(date))
         val call2 = service.getDailyDJI(apiKey)
-        call2.enqueue(DailyCallback(date, count))
+        call2.enqueue(DailyCallback(date))
         val call3 = service.getDailySNP(apiKey)
-        call3.enqueue(DailyCallback(date, count))
+        call3.enqueue(DailyCallback(date))
         val call4 = service.getDailyNASDAQ(apiKey)
-        call4.enqueue(DailyCallback(date, count))
+        call4.enqueue(DailyCallback(date))
     }
 
     inner class ImageCallback(date: String) :
@@ -144,10 +144,9 @@ class APIManager(val userViewModel: UserViewModel) {
             }
         }
     }
-    inner class DailyCallback(date: String, count: Int = 0) :
+    inner class DailyCallback(date: String) :
         Callback<ResponseBody> {
         val date = date
-        val count = count
         override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
         }
 
@@ -160,9 +159,6 @@ class APIManager(val userViewModel: UserViewModel) {
                     val response = it.string()
                     dailyDecodeJson(response, date)
                 }
-            }
-            else if (count == 0) {
-                fetchDailyImage(date, 1)
             }
         }
     }

@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.activityViewModels
 import kotlinx.android.synthetic.main.fragment_detail_report.*
 
@@ -22,6 +24,12 @@ class DetailReportFragment : Fragment() {
         val indexScore = viewModel.getIndexScore(viewModel.currentIndex.value!!)
         index_textView.text = viewModel.currentIndex.value!!
         indexScore_text.text = indexScore.toString()
+
+        var color = 0
+        when(indexScore){
+            1 -> color = getResources().getColor(R.color.red)
+            2 -> color = getResources().getColor(R.color.red)
+        }
         indexReport_text.text = viewModel.getIndexReport(indexScore)
     }
 

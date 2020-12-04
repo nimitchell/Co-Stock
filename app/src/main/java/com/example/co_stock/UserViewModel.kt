@@ -471,8 +471,9 @@ class UserViewModel : ViewModel(), ValueEventListener {
         return dailyMessage.value?.get(score)!!
     }
 
-    fun getIndexScore(index:String): Int{
+    fun getIndexScore(index:String): Int {
         // TODO Rachael: write code that determins if the daily image for this stock is good or bad (might just check if change is positive or negative turn it into 1-5
+
         return 1
     }
 
