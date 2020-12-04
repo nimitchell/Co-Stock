@@ -27,30 +27,23 @@ class DailyReportFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
+        // Getting the user's current date to fetch the Daily Image
         val current = LocalDateTime.now()
-
-
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val formatted = current.format(formatter)
+
         if (viewModel.dailyImage.value != null && viewModel.dailyImage.value?.DJI?.date != formatted) {
             viewModel.apiManager?.value?.fetchDailyImage(formatted)
         }
 
-
+        // Setting the quote and daily report texts
         val dailyScore = viewModel.calculateDailyScore()
         quote_textView.text = viewModel.getRandomQuote()
         dailyReport_text.text = viewModel.getDailyReport(dailyScore)
 
+
         viewModel.dailyImage.observe(viewLifecycleOwner, {
-            Log.d("DJI", it.DJI.symbol)
-            firstIndex_button.text = viewModel.getIndexName(it.DJI.symbol)
-            Log.d("FTSE", it.FTSE.symbol)
-            secondIndex_button.text = viewModel.getIndexName(it.FTSE.symbol)
-            Log.d("NASDAQ", it.NASDAQ.symbol)
-            thirdIndex_button.text = viewModel.getIndexName(it.NASDAQ.symbol)
-            Log.d("SNP", it.SNP.symbol)
-            fourthIndex_button.text = viewModel.getIndexName(it.SNP.symbol)
+            // Moving to the Detailed Screen with the selected index
             val cur_img = it
             firstIndex_button.setOnClickListener {
                 viewModel.currentIndex.value = cur_img.DJI

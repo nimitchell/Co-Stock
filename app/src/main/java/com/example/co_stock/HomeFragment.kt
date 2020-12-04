@@ -27,12 +27,17 @@ class HomeFragment : Fragment() {
 
         var picName = ""
         viewModel.currentUser.observe(viewLifecycleOwner, {
+            // Setting textViews with user information
             userName_textView.text = it.name
             userBio_textView.text = it.bio
             picName = it.profilePic!!
+
+            // Determines user's sign if one isn't assigned yet and displays it
             if (it.sign == "")
                 viewModel.determineSign()
             userSign_textView.text = it.sign
+
+            // Sets table and following listings with user's appropriate signs
             if(!it.signs.isEmpty()) {
                 userSign_tableText.text = it.signs.get(0)
                 userRising_tableText.text = it.signs.get(1)
@@ -46,15 +51,13 @@ class HomeFragment : Fragment() {
             }
 
         })
+
+        // Sets profile image
         viewModel.profilePic.observe(viewLifecycleOwner, {
             profile_img.setImageBitmap(it)
         })
 
-        userSignDescription.text = "This sign shows who you are at your core. This is your most stable and comfortable state."
-        userRisingDescription.text = "This sign holds the most positive qualities you can aqure at your fullest potential."
-        userRivalDescription.text = "This sign holds the most negative qualities you have to fight against in your most vulnerable states."
-        userMoonDescription.text = "This is the sign you will benefit most form observing and understanding their perspectives on the world."
-
+        // Navigations
         edit_button.setOnClickListener {
             findNavController().navigate(R.id.action_homeFragment_to_editFragment)
         }

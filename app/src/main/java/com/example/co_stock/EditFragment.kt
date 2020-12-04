@@ -26,11 +26,10 @@ class EditFragment : Fragment() {
     val viewModel: UserViewModel by activityViewModels<UserViewModel>()
     var nameEdit: String? = null
     var bioEdit: String? = null
-    var picEdit: Bitmap? = null
 
     override fun onPause() {
         super.onPause()
-        // TODO maybe don't need bitMap in editUserInfo
+        // Update user the info if they filled in the editText
         if (name_editText.text.isNotEmpty()) {
             nameEdit = name_editText.text.toString()
         }
@@ -43,6 +42,7 @@ class EditFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // If user already had values in these fields they would show instead of empty editTexts
         var picName = ""
         viewModel.currentUser.observe(viewLifecycleOwner, {
             name_editText.setText(it.name)
@@ -53,7 +53,7 @@ class EditFragment : Fragment() {
             edit_profile_img.setImageBitmap(it)
         })
 
-
+        // Allowing users to access gallery images and choose one
         edit_profile_img.setOnClickListener {
             val intent= Intent(Intent.ACTION_PICK)
             intent.type="image/*"
@@ -73,6 +73,7 @@ class EditFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_edit, container, false)
     }
 
+    // Once image is selected by user it is set to display and saved for later access
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(resultCode== Activity.RESULT_OK && requestCode==0){
@@ -82,8 +83,6 @@ class EditFragment : Fragment() {
                 val selectBitmap = BitmapFactory.decodeStream(imageStream)
                 viewModel.setImage(viewModel.currentUser.value!!.profilePic, selectBitmap)
                 viewModel.profilePic.postValue(selectBitmap)
-                //edit_profile_img.setImageBitmap(selectBitmap)
-
             }
         }
     }

@@ -248,7 +248,7 @@
                 android:layout_width="230dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="100dp"
-                android:text="Description of sign"
+                android:text="This sign shows who you are at your core. This is your most stable and comfortable state."
                 android:textColor="@color/colorTextPrimary"
                 android:textSize="15sp" />
 
@@ -267,7 +267,7 @@
                 android:layout_width="230dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="100dp"
-                android:text="Description of sign"
+                android:text="This sign holds the most positive qualities you can acquire at your fullest potential."
                 android:textColor="@color/colorTextPrimary"
                 android:textSize="15sp" />
 
@@ -286,7 +286,7 @@
                 android:layout_width="230dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="100dp"
-                android:text="Description of sign"
+                android:text="This sign holds the most negative qualities you have to fight against in your most vulnerable states."
                 android:textColor="@color/colorTextPrimary"
                 android:textSize="15sp" />
 
@@ -305,7 +305,7 @@
                 android:layout_width="230dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="100dp"
-                android:text="Description of sign"
+                android:text="This is the sign you will benefit most form observing and understanding their perspectives on the world."
                 android:textColor="@color/colorTextPrimary"
                 android:textSize="15sp" />
         </androidx.appcompat.widget.LinearLayoutCompat>

@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //set Firebase manually
+        // Setting firebase manually
         val options = FirebaseOptions.Builder()
             .setApplicationId("com.example.co_stock")
             .setApiKey(getString(R.string.firebase_api_key))
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.apiManager.value = APIManager(viewModel, getString(R.string.stockmarket_api_key))
         viewModel.profilePic.value = BitmapFactory.decodeResource(resources, R.drawable.round_portrait_white_48dp)
 
-
+        // Compacting activity results for accessing gallery photos when user permission is granted
         if (!checkPermission()) {
             ActivityCompat.requestPermissions(
                 this,
@@ -58,6 +58,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Returning whether or not permission to access gallery photos
     fun checkPermission(): Boolean {
         val fineLocPermission = ContextCompat.checkSelfPermission(
             this,
@@ -66,6 +67,7 @@ class MainActivity : AppCompatActivity() {
         return fineLocPermission == PackageManager.PERMISSION_GRANTED
     }
 
+    // Exits the app if permission is not granted
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -80,15 +82,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Asserting that there is a menu
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.menu, menu)
         return true
     }
 
+    // The menu home button navigates users to the homeFragment conditionally
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId){
             R.id.home_menu ->{
+                // Making sure user is logged in/signed in by checking if username is not Empty
                 if (viewModel.currentUser.value!!.username != ""){
                     findNavController(R.id.nav_host_fragment).navigate(R.id.action_global_homeFragment)
                 }

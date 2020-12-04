@@ -48,7 +48,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="35dp"
         android:background="@color/colorAccent"
-        android:text="First Index"
+        android:text="Dow Jones Industrial Average"
         android:textAllCaps="false"
         android:textColor="#000000"
         android:textSize="19sp" />
@@ -60,7 +60,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
         android:background="@color/colorAccent"
-        android:text="Second Index"
+        android:text="FTSE 100"
         android:textAllCaps="false"
         android:textColor="#000000"
         android:textSize="19sp" />
@@ -72,7 +72,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
         android:background="@color/colorAccent"
-        android:text="Third Index"
+        android:text="NASDAQ Composite"
         android:textAllCaps="false"
         android:textColor="#000000"
         android:textSize="19sp" />
@@ -84,7 +84,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
         android:background="@color/colorAccent"
-        android:text="Fourth Index"
+        android:text="S&amp;P 500 Index"
         android:textAllCaps="false"
         android:textColor="#000000"
         android:textSize="19sp" />

@@ -33,12 +33,14 @@ class FriendsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Setting up the recyclerView
         viewManger = LinearLayoutManager(activity)
         viewAdapter = RecyclerViewAdapter(ArrayList(), viewModel.storage.value!!)
-
         friends_recyclerView.layoutManager = viewManger
         friends_recyclerView.adapter = viewAdapter
 
+        // Making sure recyclerView stays updated
         viewModel.friends.observe(viewLifecycleOwner, {
             viewAdapter.friendsList = it
             viewAdapter.notifyDataSetChanged()
@@ -48,7 +50,9 @@ class FriendsFragment : Fragment() {
             viewModel.removeFriend(it.username)
         }
 
+        // Removes friend through delete button on each recyclerView item
         viewAdapter.deleteLambda = deleteLambda
+        // Navigates to next fragment when recyclerView item is clicked
         viewAdapter.clickLambda = friendClickLambda
 
         search_button.setOnClickListener {

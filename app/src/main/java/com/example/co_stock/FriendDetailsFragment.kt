@@ -26,18 +26,18 @@ class FriendDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel.currentFriend.observe(viewLifecycleOwner, {
-            Log.d("friendDetails", it.toString())
+            // Setting appropriate text with information from currentFriend in viewModel
             friendName_text.text = it?.name
             friendSign_text.text = it?.sign
             friendBio_text.text = it?.bio
-            var friend = it
+            val friend = it
 
+            // Getting and setting the currentFriend's profile image
             viewModel.storage.observe(viewLifecycleOwner, {
-                Log.d("storage ref", it.toString())
-                var imageRef = it.child(friend?.profilePic!!)
+                val imageRef = it.child(friend?.profilePic!!)
                 val FIVE_MEGABYTES: Long = 1024 * 1024 * 5
                 imageRef?.getBytes(FIVE_MEGABYTES)?.addOnSuccessListener {
-                    var bitm = BitmapFactory.decodeByteArray(it,0, it.size)
+                    val bitm = BitmapFactory.decodeByteArray(it,0, it.size)
                     friendProfile_img.setImageBitmap(bitm)
                 }?.addOnFailureListener {
                     // Handle any errors
@@ -45,7 +45,7 @@ class FriendDetailsFragment : Fragment() {
                 }
             })
 
-
+            // Calculating and displaying compatibility score and report
             val compScore = viewModel.getFriendCompatibility(it!!)
             compatibility_textNumber.text = compScore.toString()
             compatibility_message.text = viewModel.getFriendCompatibilityMessage(it!!.name, compScore)
