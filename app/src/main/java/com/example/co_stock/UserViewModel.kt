@@ -26,7 +26,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
     var firebase = MutableLiveData<DatabaseReference>()
     var currentUser = MutableLiveData<User>()
     var currentFriend = MutableLiveData<User>()
-    var currentIndex = MutableLiveData<String>()
+    var currentIndex = MutableLiveData<IndexImage>()
     var dailyImage = MutableLiveData<MarketImage>()
     var userAuth = MutableLiveData<FirebaseUser>()
     var friends = MutableLiveData<ArrayList<User>>()
@@ -254,10 +254,10 @@ class UserViewModel : ViewModel(), ValueEventListener {
         var open = compareImagesOpen(image)
         if (open > 0)
             count++
-            var close = compareImagesClose(image)
+        var close = compareImagesClose(image)
         if (close > 0)
             count++
-            var high = compareImagesHigh(image)
+        var high = compareImagesHigh(image)
         if (high > 0)
             count++
         var low = compareImagesLow(image)
@@ -471,10 +471,15 @@ class UserViewModel : ViewModel(), ValueEventListener {
         return dailyMessage.value?.get(score)!!
     }
 
-    fun getIndexScore(index:String): Int {
-        // TODO Rachael: write code that determins if the daily image for this stock is good or bad (might just check if change is positive or negative turn it into 1-5
-
-        return 1
+    fun getIndexScore(index:String): Int{
+        var percentChange: Int
+        if(currentIndex.value?.changePercent!! <= -1)
+            percentChange = 1
+        else if(currentIndex.value?.changePercent!! > -1 || currentIndex.value?.changePercent!! < 1)
+            percentChange = 2
+        else
+            percentChange = 3
+        return percentChange
     }
 
     fun getIndexReport(score:Int) : String{

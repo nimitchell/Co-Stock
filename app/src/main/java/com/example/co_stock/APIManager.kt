@@ -35,7 +35,7 @@ class APIManager(val userViewModel: UserViewModel) {
             @Query("apikey") api_key: String
         ): Call<ResponseBody>
 
-        @GET("api/v3/historical-price-full/%5EGSPTSE?")
+        @GET("api/v3/historical-price-full/%5EGSPC?")
         fun getSNP(
             @Query("apikey") api_key: String
         ): Call<ResponseBody>
@@ -56,7 +56,7 @@ class APIManager(val userViewModel: UserViewModel) {
             @Query("apikey") api_key: String
         ): Call<ResponseBody>
 
-        @GET("api/v3/quote/%5EGSPTSE?")
+        @GET("api/v3/quote/%5EGSPC?")
         fun getDailySNP(
             @Query("apikey") api_key: String
         ): Call<ResponseBody>
