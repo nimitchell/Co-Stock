@@ -414,25 +414,6 @@ class UserViewModel : ViewModel(), ValueEventListener {
         currentFriend.postValue(user)
     }
 
-    // TODO remove later
-    fun getUserByName(email:String) {
-        val dbRef = firebase.value
-        val userRef = dbRef?.child("users")?.orderByChild("email")?.equalTo(email)
-        val valueEventListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (ds in dataSnapshot.children) {
-                    val user = ds.getValue(User::class.java)
-                    currentUser.value = user
-                    currentUser.postValue(currentUser.value)
-                    Log.d("getUserByName", currentUser.value?.username!!)
-                }
-            }
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.d("error", databaseError.getMessage())
-            }
-        }
-        userRef?.addListenerForSingleValueEvent(valueEventListener)
-    }
 
     fun checkUserExists(username:String):Boolean {
         val dbRef = firebase.value
@@ -454,7 +435,6 @@ class UserViewModel : ViewModel(), ValueEventListener {
     }
 
     fun getFriendCompatibility(friend:User): Int {
-        //TODO Rachael's work feeds into here
         //compare the friend's market image to yours using compareImages
         return compareImages(friend.birthImage)
     }
