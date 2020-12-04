@@ -503,6 +503,15 @@ class UserViewModel : ViewModel(), ValueEventListener {
             else     -> return ""
         }
     }
+    fun getIndexDescription(index:String): String {
+        when(index) {
+            "^FTSE" -> return "The people of this sign are very loyal to others. Thay also usually find great passion in their trade. But their focus of these attributes usually also leads to them not prioritizing their own health or wellbeing."
+            "^DJI" -> return "This sign is populated by natural leaders. Their independent and influential nature leads many people to look to them for advice and guidance. However, this sign is vulnerable to being overconfident and letting their influence on others get to their heads."
+            "^GSPC" -> return "This sign is full of very dependable and trustworthy people. But because they value their reliability it could lead them to be over-cautious in life and unhealthy perfectionists."
+            "^IXIC" -> return "The people of this sign are uniquely intelligent. They love taking in new information from anything they come across. However, this sign is also very exclusive with the people they let into their inner circle and they also have a vulnerability of co-dependence."
+            else     -> return ""
+        }
+    }
 
     fun getIndexReport(score:Int) : String{
         Log.d("getIndexReport", indexMessage.value.toString())

@@ -34,6 +34,7 @@ class DetailReportFragment : Fragment() {
         }
         indexScore_text.setTextColor(color)
         indexReport_text.text = viewModel.getIndexReport(indexScore)
+        index_description.text = viewModel.getIndexDescription(viewModel.currentIndex.value?.symbol!!)
     }
 
      override fun onCreateView(
