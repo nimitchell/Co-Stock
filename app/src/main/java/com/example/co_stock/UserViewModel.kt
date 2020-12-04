@@ -249,19 +249,19 @@ class UserViewModel : ViewModel(), ValueEventListener {
     fun compareImages(image: MarketImage): Int{
         var count = 0
         var change = compareImagesChange(image)
-        if (change > 0)
+        if (change == 0)
             count++
         var open = compareImagesOpen(image)
-        if (open > 0)
+        if (open == 0)
             count++
         var close = compareImagesClose(image)
-        if (close > 0)
+        if (close == 0)
             count++
         var high = compareImagesHigh(image)
-        if (high > 0)
+        if (high == 0)
             count++
         var low = compareImagesLow(image)
-        if (low > 0)
+        if (low == 0)
             count++
         return count
     }
