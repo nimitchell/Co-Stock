@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId){
             R.id.home_menu ->{
-                if (viewModel.currentUser.value != null){
+                if (viewModel.currentUser.value!!.username != ""){
                     findNavController(R.id.nav_host_fragment).navigate(R.id.action_global_homeFragment)
                 }
                 true

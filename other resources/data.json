@@ -1,17 +1,17 @@
 {
 	"daily_message" : {
-		"1" : "oof",
-		"2" : "could be better",
-		"3" : "we aight",
-		"4" : "kinda popin ngl",
-		"5" : "POGGERS"
+		"1" : "OOF! It isn't looking too good for you today. Stay positive and remember that tomorrow is a new day!",
+		"2" : "Could be better. You aren't going to crash and burn but try to avoid tight situations as much as possible.",
+		"3" : "We 'aight. You're gonna have an average day today, nothing spectacular but at least nothing bad is going on.",
+		"4" : "Kinda popin' not gonna lie. The stocks are in your favor today.",
+		"5" : "POGGERS!! Congratulations your index is looking blessed! Go out and enjoy your good day!!"
 	},
 	"index_message" : {
-		"1" : "absolute trashcan",
-		"2" : "prolly not it",
-		"3" : "it's chill",
-		"4" : "we good boyz",
-		"5" : "strait fire"
+		"1" : "Absolute trashcan. This index is on the completely under-performing today.",
+		"2" : "Probably not it. This index is edging on the low side today.",
+		"3" : "It's ok I guess. It's not doing bad but it could definitely do better.",
+		"4" : "We good boyz! Index is looking good right now.",
+		"5" : "God-like!! Enjoy the good life while it lasts!!"
 	},
 	"quotes" : {
 		"1" : "Work until your bank account looks like a phone number.",
@@ -29,12 +29,6 @@
 		"3" : {"rating" : 3, "personality":"Sheep", "message" : "While not out to get you, you may lack common ground as a wolf."},
 		"4" : {"rating" : 4, "personality":"Stag", "message" : "Consistent and reliable. You can count on this person to always be on the up."},
 		"5" : {"rating" : 5, "personality":"Midas", "message" : "Everything they touch turns to Gold! This person should make a great buissness partner"}
-	},
-	"sign_descriptions" : {
-		"sun" : "This sign shows who you are at your core. This is your most stable and comfortable state.",
-		"rising" : "This sign holds the most positive qualities you can aqure at your fullest potential.",
-		"rival" : "This sign holds the most negative qualities you have to fight against in your most vulnerable states.",
-		"moon" : "This is the sign you will benefit most form observing and understanding their perspectives on the world."
 	},
 	"index_descriptions" : {
 		"dow_jones" : "This sign is populated by natural leaders. Their independent and influential nature leads many people to look to them for advice and guidance. However, this sign is vulnerable to being overconfident and letting their influence on others get to their heads.",
