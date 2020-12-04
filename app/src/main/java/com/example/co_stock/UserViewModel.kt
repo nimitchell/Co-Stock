@@ -35,6 +35,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
     var indexMessage = MutableLiveData<Map<Int, String>>()
     var compatibility = MutableLiveData<Map<Int, Compatibility>>()
     var storage = MutableLiveData<StorageReference>()
+    var profilePic = MutableLiveData<Bitmap>()
 
     init {
         firebase.value = Firebase.database.getReference("") // empty string means get root

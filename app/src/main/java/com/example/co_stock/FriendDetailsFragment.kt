@@ -35,8 +35,8 @@ class FriendDetailsFragment : Fragment() {
             viewModel.storage.observe(viewLifecycleOwner, {
                 Log.d("storage ref", it.toString())
                 var imageRef = it.child(friend?.profilePic!!)
-                val ONE_MEGABYTE: Long = 1024 * 1024
-                imageRef?.getBytes(ONE_MEGABYTE)?.addOnSuccessListener {
+                val FIVE_MEGABYTES: Long = 1024 * 1024 * 5
+                imageRef?.getBytes(FIVE_MEGABYTES)?.addOnSuccessListener {
                     var bitm = BitmapFactory.decodeByteArray(it,0, it.size)
                     friendProfile_img.setImageBitmap(bitm)
                 }?.addOnFailureListener {

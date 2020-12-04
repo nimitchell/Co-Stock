@@ -10,12 +10,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ValueEventListener
+import kotlinx.android.synthetic.main.fragment_friend_details.*
 import kotlinx.android.synthetic.main.fragment_register.*
 import kotlinx.android.synthetic.main.fragment_sign_in.*
 
@@ -65,7 +67,15 @@ class SignInFragment : Fragment() {
                                     for (ds in dataSnapshot.children) {
                                         val user = ds.getValue(User::class.java)
                                         viewModel.setUser(user!!)
-                                        Log.d("getUserByName", viewModel.currentUser.value?.username!!)
+                                        viewModel.storage.observe(viewLifecycleOwner, {
+                                            var imageRef = it.child(user?.profilePic!!)
+                                            val FIVE_MEGABYTES: Long = 1024 * 1024 * 5
+                                            imageRef?.getBytes(FIVE_MEGABYTES)?.addOnSuccessListener {
+                                                viewModel.profilePic.postValue(BitmapFactory.decodeByteArray(it,0, it.size))
+                                            }?.addOnFailureListener {
+                                                Log.d("failure", it.toString())
+                                            }
+                                        })
                                         findNavController().navigate(R.id.action_signInFragment_to_homeFragment)
                                     }
                                 }

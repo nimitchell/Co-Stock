@@ -22,24 +22,6 @@ class HomeFragment : Fragment() {
 
     val viewModel: UserViewModel by activityViewModels<UserViewModel>()
 
-    override fun onResume() {
-        super.onResume()
-        var picName = ""
-        viewModel.currentUser.observe(viewLifecycleOwner, {
-            picName = it.profilePic!!
-        })
-        viewModel.storage.observe(viewLifecycleOwner, {
-            var imageRef = it.child(picName)
-            val ONE_MEGABYTE: Long = 1024 * 1024
-            imageRef?.getBytes(ONE_MEGABYTE)?.addOnSuccessListener {
-                // Data for "images/island.jpg" is returned, use this as needed
-                profile_img.setImageBitmap(BitmapFactory.decodeByteArray(it,0, it.size))
-            }?.addOnFailureListener {
-                // Handle any errors
-                throw it
-            }
-        })
-    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -62,21 +44,12 @@ class HomeFragment : Fragment() {
                 userRivalText.text = it.signs.get(2)
                 userMoonText.text = it.signs.get(3)
             }
+
         })
-        viewModel.storage.observe(viewLifecycleOwner, {
-            var imageRef = it.child(picName)
-            val ONE_MEGABYTE: Long = 1024 * 1024
-            imageRef?.getBytes(ONE_MEGABYTE)?.addOnSuccessListener {
-                // Data for "images/island.jpg" is returned, use this as needed
-                profile_img.setImageBitmap(BitmapFactory.decodeByteArray(it,0, it.size))
-            }?.addOnFailureListener {
-                // Handle any errors
-                throw it
-            }
+        viewModel.profilePic.observe(viewLifecycleOwner, {
+            profile_img.setImageBitmap(it)
         })
 
-
-        // TODO add desciptions
         userSignDescription.text = "This sign shows who you are at your core. This is your most stable and comfortable state."
         userRisingDescription.text = "This sign holds the most positive qualities you can aqure at your fullest potential."
         userRivalDescription.text = "This sign holds the most negative qualities you have to fight against in your most vulnerable states."

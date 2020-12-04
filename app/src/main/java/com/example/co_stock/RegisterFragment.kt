@@ -97,6 +97,7 @@ class RegisterFragment : Fragment() {
                             profilePic = "${username}.png"
                             ))
                             viewModel.setImage("${username}.png", BitmapFactory.decodeResource(resources, R.drawable.round_portrait_white_48dp))
+                            viewModel.profilePic.postValue(BitmapFactory.decodeResource(resources, R.drawable.round_portrait_white_48dp))
                             findNavController().navigate(R.id.action_registerFragment_to_homeFragment)
                         } else {
                             // If sign in fails, display a message to the user.

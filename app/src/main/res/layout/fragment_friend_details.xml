@@ -44,7 +44,7 @@
             android:id="@+id/friendName_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="55dp"
+            android:layout_marginStart="30dp"
             android:text="Friend's Name"
             android:textColor="@color/colorTextPrimary"
             android:textSize="24sp" />
@@ -68,7 +68,7 @@
             android:id="@+id/friendSign_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="72dp"
+            android:layout_marginStart="47dp"
             android:text="Friend's Sign"
             android:textColor="@color/colorTextPrimary"
             android:textSize="24sp" />
@@ -92,7 +92,7 @@
             android:id="@+id/friendBio_text"
             android:layout_width="wrap_content"
             android:layout_height="85dp"
-            android:layout_marginStart="84dp"
+            android:layout_marginStart="59dp"
             android:text="Friend's Bio"
             android:textColor="@color/colorTextPrimary"
             android:textSize="24sp" />
@@ -135,5 +135,6 @@
         android:layout_gravity="center_horizontal"
         android:text="Compatibility Message"
         android:textColor="@color/colorTextPrimary"
-        android:textSize="15sp" />
+        android:textAlignment="center"
+        android:textSize="20sp" />
 </LinearLayout>

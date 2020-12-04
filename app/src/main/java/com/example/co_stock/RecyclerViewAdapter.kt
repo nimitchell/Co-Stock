@@ -43,8 +43,8 @@ class RecyclerViewAdapter(var friendsList: ArrayList<User>, var storage: Storage
 
                 // load image
                 var imageRef = storage.child(friend.profilePic)
-                val ONE_MEGABYTE: Long = 1024 * 1024
-                imageRef?.getBytes(ONE_MEGABYTE)?.addOnSuccessListener {
+                val FIVE_MEGABYTES: Long = 1024 * 1024 * 5
+                imageRef?.getBytes(FIVE_MEGABYTES)?.addOnSuccessListener {
                     // Data for "images/island.jpg" is returned, use this as needed
                     view.findViewById<ImageView>(R.id.friendProfile_img).setImageBitmap(BitmapFactory.decodeByteArray(it,0, it.size))
                 }?.addOnFailureListener {
