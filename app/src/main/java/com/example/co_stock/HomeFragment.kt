@@ -1,5 +1,6 @@
 package com.example.co_stock
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -24,13 +25,27 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        var picName = ""
         viewModel.currentUser.observe(viewLifecycleOwner, {
             Log.d("homefrag obs", it.toString())
             userName_textView.text = it.name
             userBio_textView.text = it.bio
             userSign_textView.text = it.sign
-            //profile_img.setImageBitmap(viewModel.getProfileImage(it.profilePic!!))
+            picName = it.profilePic!!
         })
+        viewModel.storage.observe(viewLifecycleOwner, {
+            var imageRef = it.child(picName)
+            val ONE_MEGABYTE: Long = 1024 * 1024
+            imageRef?.getBytes(ONE_MEGABYTE)?.addOnSuccessListener {
+                // Data for "images/island.jpg" is returned, use this as needed
+                profile_img.setImageBitmap(BitmapFactory.decodeByteArray(it,0, it.size))
+            }?.addOnFailureListener {
+                // Handle any errors
+                throw it
+            }
+        })
+
+
 
         //Log.d("homefrag", viewModel.toString())
         //Log.d("homefrag", viewModel.currentUser.value.toString())

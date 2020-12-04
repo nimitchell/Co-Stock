@@ -44,6 +44,27 @@ class APIManager(val userViewModel: UserViewModel) {
         fun getNASDAQ(
             @Query("apikey") api_key: String
         ): Call<ResponseBody>
+
+        // Daily
+        @GET("api/v3/quote/%5EFTSE?")
+        fun getDailyFTSE(
+            @Query("apikey") api_key: String
+        ): Call<ResponseBody>
+
+        @GET("api/v3/quote/%5EDJI?")
+        fun getDailyDJI(
+            @Query("apikey") api_key: String
+        ): Call<ResponseBody>
+
+        @GET("api/v3/quote/%5EGSPTSE?")
+        fun getDailySNP(
+            @Query("apikey") api_key: String
+        ): Call<ResponseBody>
+
+        @GET("api/v3/quote/%5EIXIC?")
+        fun getDailyNASDAQ(
+            @Query("apikey") api_key: String
+        ): Call<ResponseBody>
     }
 
     fun decodeJson(json: String, date: String) {
@@ -66,6 +87,23 @@ class APIManager(val userViewModel: UserViewModel) {
             }
         }
     }
+    fun dailyDecodeJson(json: String, date: String) {
+        val image = IndexImage()
+        val data = JSONArray(json)
+        for (i in 0 until data.length()){
+            val cur = data.getJSONObject(i)
+            image.symbol = cur.getString("symbol")
+            image.date = date
+            image.open = cur.getDouble("open").toFloat()
+            image.high = cur.getDouble("dayHigh").toFloat()
+            image.low = cur.getDouble("dayLow").toFloat()
+            image.close = cur.getDouble("price").toFloat()
+            image.change = cur.getDouble("change").toFloat()
+            image.changePercent = cur.getDouble("changesPercentage").toFloat()
+            image.changeOverTime = cur.getDouble("changesPercentage").toFloat()/100
+            userViewModel.setDailyImage(image.symbol, image)
+        }
+    }
 
     fun fetchImage(date: String) {
         val call = service.getFTSE(apiKey)
@@ -76,6 +114,17 @@ class APIManager(val userViewModel: UserViewModel) {
         call3.enqueue(ImageCallback(date))
         val call4 = service.getNASDAQ(apiKey)
         call4.enqueue(ImageCallback(date))
+    }
+
+    fun fetchDailyImage(date: String) {
+        val call = service.getDailyFTSE(apiKey)
+        call.enqueue(DailyCallback(date))
+        val call2 = service.getDailyDJI(apiKey)
+        call2.enqueue(DailyCallback(date))
+        val call3 = service.getDailySNP(apiKey)
+        call3.enqueue(DailyCallback(date))
+        val call4 = service.getDailyNASDAQ(apiKey)
+        call4.enqueue(DailyCallback(date))
     }
 
     inner class ImageCallback(date: String) :
@@ -91,6 +140,23 @@ class APIManager(val userViewModel: UserViewModel) {
             if (response.isSuccessful) {
                 response.body()?.let {
                     decodeJson(it.string(), date)
+                }
+            }
+        }
+    }
+    inner class DailyCallback(date: String) :
+        Callback<ResponseBody> {
+        val date = date
+        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+        }
+
+        override fun onResponse(
+            call: Call<ResponseBody>,
+            response: Response<ResponseBody>
+        ) {
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    dailyDecodeJson(it.string(), date)
                 }
             }
         }

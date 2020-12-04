@@ -41,6 +41,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
         firebase.value?.addValueEventListener(this)
         storage.value = FirebaseStorage.getInstance().getReference("images")
         currentUser.value = User()
+        dailyImage.value = MarketImage()
         apiManager.value = APIManager(this)
     }
 
@@ -66,19 +67,18 @@ class UserViewModel : ViewModel(), ValueEventListener {
         }
     }
 
-    fun getProfileImage(img_name: String):Bitmap{
-        var imageRef = storage.value?.child(img_name)
-        lateinit var imagebytes:ByteArray
-        val ONE_MEGABYTE: Long = 1024 * 1024
-        imageRef?.getBytes(ONE_MEGABYTE)?.addOnSuccessListener {
-            // Data for "images/island.jpg" is returned, use this as needed
-            imagebytes = it
-        }?.addOnFailureListener {
-            // Handle any errors
-            throw it
+    fun setDailyImage(symbol:String, image: IndexImage) {
+        when(symbol) {
+            "^FTSE" -> dailyImage.value?.FTSE = image
+            "^DJI" -> dailyImage.value?.DJI = image
+            "^GSPTSE" -> dailyImage.value?.SNP = image
+            else     -> dailyImage.value?.NASDAQ = image
         }
-        return BitmapFactory.decodeByteArray(imagebytes,0, imagebytes.size)
+        dailyImage.postValue(dailyImage.value)
     }
+
+    //fun getProfileImage(img_name: String):Bitmap{
+    //}
 
     fun updateAuth(user:FirebaseUser) {
         userAuth.value = user
@@ -274,7 +274,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
         firebase.value?.child("users")?.child(user.username)?.setValue(currentUser.value)
     }
 
-    fun updateMI(symbol:String, image: IndexImage) {
+    fun updateMI(symbol:String, image: IndexImage,) {
         when(symbol) {
             "^FTSE" -> firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("birthImage")?.child("ftse")?.setValue(image)
             "^DJI" -> firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("birthImage")?.child("dji")?.setValue(image)
@@ -313,7 +313,9 @@ class UserViewModel : ViewModel(), ValueEventListener {
 
     fun addFriend(username:String){
         if (firebase.value?.child("users")?.child(username) != null) {
-            var newFriends = currentUser.value?.friends as ArrayList<String>
+            var newFriends = arrayListOf<String>()
+            if (currentUser.value?.friends?.size!! > 0)
+                newFriends = currentUser.value?.friends as ArrayList<String>
             newFriends.add(username)
             currentUser.value?.friends = newFriends.toList()
             firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("friends")?.setValue(currentUser.value?.friends)
@@ -330,8 +332,73 @@ class UserViewModel : ViewModel(), ValueEventListener {
         }
     }
     fun setUser(user:User) {
-        currentUser.value = user
-        currentUser.postValue(currentUser.value)
+        currentUser.postValue(user)
+        val valueEventListener = object : ValueEventListener {
+            var tmpFriends = ArrayList<User>()
+            var tmpUser = currentUser.value
+            override fun onDataChange(snapshot: DataSnapshot) {
+                Log.d("onDataCHange", snapshot.toString())
+                snapshot.child("users").children.forEach {
+                    it.getValue(User::class.java)?.let {
+                        // update current user
+                        if (it.email == userAuth.value?.email) {
+                            Log.d("onDataChange", it.username)
+                            tmpUser = it
+                        }
+                        // update friends list
+                        else if (currentUser.value?.friends?.contains(it.username) != null && currentUser.value?.friends?.contains(
+                                it.username
+                            )!!
+                        ) {
+                            tmpFriends.add(it)
+                        }
+                    }
+                }
+                currentUser.postValue(tmpUser)
+                friends.postValue(tmpFriends)
+                // get quotes
+                var tmpQuotes = ArrayList<String>()
+                snapshot.child("quotes").children.forEach {
+                    it.getValue(String::class.java)?.let {
+                        tmpQuotes.add(it)
+                    }
+                }
+                quotes.postValue(tmpQuotes)
+
+                // get daily messages
+                var tmpDaily = mutableMapOf<Int, String>()
+                var counter = 0
+                snapshot.child("daily_message").children.forEach {
+                    it.getValue(String::class.java)?.let {
+                        counter++
+                        tmpDaily[counter] = it
+                    }
+                }
+                dailyMessage.postValue(tmpDaily)
+
+                // get index messages
+                var tmpIndex = mutableMapOf<Int, String>()
+                counter = 0
+                snapshot.child("index_message").children.forEach {
+                    it.getValue(String::class.java)?.let {
+                        counter++
+                        tmpIndex[counter] = it
+                    }
+                }
+                indexMessage.postValue(tmpIndex)
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.d("error", databaseError.getMessage())
+            }
+        }
+        Log.d("end", "got here")
+        firebase.value?.addListenerForSingleValueEvent(valueEventListener)
+        Log.d("end2", "didn't die")
+
+    }
+    fun setFriend(user:User) {
+        currentFriend.value = user
+        currentFriend.postValue(user)
     }
 
     // TODO remove later
@@ -391,6 +458,8 @@ class UserViewModel : ViewModel(), ValueEventListener {
     }
 
     fun getDailyReport(score:Int) : String{
+        Log.d("dailyMessage", dailyMessage.value.toString())
+        Log.d("score", score.toString())
         return dailyMessage.value?.get(score)!!
     }
 

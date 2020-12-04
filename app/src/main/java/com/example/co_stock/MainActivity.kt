@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -14,17 +15,21 @@ import com.google.firebase.database.FirebaseDatabase
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import com.google.android.gms.common.api.internal.ApiKey
 import com.google.firebase.storage.FirebaseStorage
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity() {
 
     val viewModel: UserViewModel by viewModels<UserViewModel>()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -38,6 +43,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.firebase.value = FirebaseDatabase.getInstance(app).reference
         viewModel.firebase.value?.addValueEventListener(viewModel)
+
 
         if (!checkPermission()) {
             ActivityCompat.requestPermissions(

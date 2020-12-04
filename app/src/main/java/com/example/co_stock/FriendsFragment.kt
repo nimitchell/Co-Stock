@@ -1,6 +1,7 @@
 package com.example.co_stock
 
 import android.os.Bundle
+import android.os.storage.StorageManager
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.storage.StorageReference
 import kotlinx.android.synthetic.main.fragment_friends.*
 import java.util.ArrayList
 
@@ -25,14 +27,14 @@ class FriendsFragment : Fragment() {
     val viewModel: UserViewModel by activityViewModels<UserViewModel>()
 
     val friendClickLambda: (User) -> Unit ={
-        viewModel.currentFriend.value = it
+        viewModel.setFriend(it)
         findNavController().navigate(R.id.action_friendsFragment_to_friendDetailsFragment)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewManger = LinearLayoutManager(activity)
-        viewAdapter = RecyclerViewAdapter(ArrayList(), viewModel::getProfileImage)
+        viewAdapter = RecyclerViewAdapter(ArrayList(), viewModel.storage.value!!)
 
         friends_recyclerView.layoutManager = viewManger
         friends_recyclerView.adapter = viewAdapter
