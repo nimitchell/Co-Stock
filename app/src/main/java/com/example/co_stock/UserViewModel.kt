@@ -22,7 +22,7 @@ import kotlin.collections.ArrayList
 
 class UserViewModel : ViewModel(), ValueEventListener {
 
-    val apiManager = MutableLiveData<APIManager>()          // apiManager
+    val apiManager = MutableLiveData<APIManager>()
     var firebase = MutableLiveData<DatabaseReference>()
     var currentUser = MutableLiveData<User>()
     var currentFriend = MutableLiveData<User>()
@@ -38,13 +38,15 @@ class UserViewModel : ViewModel(), ValueEventListener {
     var profilePic = MutableLiveData<Bitmap>()
 
     init {
-        firebase.value = Firebase.database.getReference("") // empty string means get root
+        // Empty string means get root
+        firebase.value = Firebase.database.getReference("")
         firebase.value?.addValueEventListener(this)
         storage.value = FirebaseStorage.getInstance().getReference("images")
         currentUser.value = User()
         dailyImage.value = MarketImage()
     }
 
+    // Retrieving profile image from firebase storage with user's username
     fun setImage(name: String, image:Bitmap){
         val baos = ByteArrayOutputStream()
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos)
@@ -67,9 +69,8 @@ class UserViewModel : ViewModel(), ValueEventListener {
         }
     }
 
+    // Setting dailyImage with with specified stock index and IndexImage
     fun setDailyImage(symbol:String, image: IndexImage) {
-        Log.d("symbol", symbol)
-        Log.d("image", image.toString())
         when(symbol) {
             "^FTSE" -> dailyImage.value?.FTSE = image
             "^DJI" -> dailyImage.value?.DJI = image
@@ -79,37 +80,41 @@ class UserViewModel : ViewModel(), ValueEventListener {
         dailyImage.postValue(dailyImage.value)
     }
 
-    //fun getProfileImage(img_name: String):Bitmap{
-    //}
-
+    // Update firebase user authentication
     fun updateAuth(user:FirebaseUser) {
         userAuth.value = user
     }
 
-
+    // Sorts the market image indices for a specific user's results
     fun sortedChange(image: MarketImage): List<IndexImage>{
         var selfChangeSort = listOf(image.FTSE, image.DJI, image.SNP, image.NASDAQ)
         var selfChangeGlobal = selfChangeSort.sortedBy { it.change }
         return selfChangeGlobal
     }
 
+    // Compares current inputted MarketImage change with MarketImage on user's date of birth change
     fun compareImagesChange(image: MarketImage): Int {
         var count = 1
         var moveOn = false
+        // Listing current marketImage change
         var imageChange =
             listOf(image.DJI.change, image.FTSE.change, image.NASDAQ.change, image.SNP.change)
+        // Listing user's birth MarketImage change
         var selfChange = listOf(
             currentUser.value?.birthImage?.DJI!!.change,
             currentUser.value?.birthImage?.FTSE!!.change,
             currentUser.value?.birthImage?.NASDAQ!!.change,
             currentUser.value?.birthImage?.SNP!!.change
         )
+        // Sorting them
         var imageChangeSorted = imageChange.sorted()
         var selfChangeSorted = selfChange.sorted()
+        // Checking to see is the top values (the largest change) is equal in both sorted lists
         for(k in 0..3){
             if(imageChange.get(k) == imageChangeSorted.get(0) && selfChange.get(k) == selfChangeSorted.get(0))
                 moveOn = true
         }
+        // If the top values are equal, increments how many other values are equal in sorted lists
         if(moveOn) {
             for (i in 1..3) {
                 for (j in 0..3) {
@@ -121,26 +126,33 @@ class UserViewModel : ViewModel(), ValueEventListener {
         else{
             count = 0
         }
+        // Returning the number of equal values in the sorted list
         return count
     }
 
+    // Compares current inputted MarketImage open with MarketImage on user's date of birth open
     fun compareImagesOpen(image: MarketImage): Int {
         var count = 1
         var moveOn = false
+        // Listing current marketImage open
         var imageOpen =
             listOf(image.DJI.open, image.FTSE.open, image.NASDAQ.open, image.SNP.open)
+        // Listing user's birth MarketImage open
         var selfOpen = listOf(
             currentUser.value?.birthImage?.DJI!!.open,
             currentUser.value?.birthImage?.FTSE!!.open,
             currentUser.value?.birthImage?.NASDAQ!!.open,
             currentUser.value?.birthImage?.SNP!!.open
         )
+        // Sorting them
         var imageOpenSorted = imageOpen.sorted()
         var selfOpenSorted = selfOpen.sorted()
+        // Checking to see is the top values (the largest open) is equal in both sorted lists
         for(k in 0..3){
             if(imageOpen.get(k) == imageOpenSorted.get(0) && selfOpen.get(k) == selfOpenSorted.get(0))
                 moveOn = true
         }
+        // If the top values are equal, increments how many other values are equal in sorted lists
         if(moveOn) {
             for (i in 1..3) {
                 for (j in 0..3) {
@@ -152,26 +164,33 @@ class UserViewModel : ViewModel(), ValueEventListener {
         else{
             count = 0
         }
+        // Returning the number of equal values in the sorted list
         return count
     }
 
+    // Compares current inputted MarketImage close with MarketImage on user's date of birth close
     fun compareImagesClose(image: MarketImage): Int {
         var count = 1
         var moveOn = false
+        // Listing current marketImage close
         var imageClose =
             listOf(image.DJI.close, image.FTSE.close, image.NASDAQ.close, image.SNP.close)
+        // Listing user's birth MarketImage close
         var selfClose = listOf(
                     currentUser.value?.birthImage?.DJI!!.close,
             currentUser.value?.birthImage?.FTSE!!.close,
             currentUser.value?.birthImage?.NASDAQ!!.close,
             currentUser.value?.birthImage?.SNP!!.close
         )
+        // Sorting them
         var imageCloseSorted = imageClose.sorted()
         var selfCloseSorted = selfClose.sorted()
+        // Checking to see is the top values (the largest close) is equal in both sorted lists
         for(k in 0..3){
             if(imageClose.get(k) == imageCloseSorted.get(0) && selfClose.get(k) == selfCloseSorted.get(0))
                 moveOn = true
         }
+        // If the top values are equal, increments how many other values are equal in sorted lists
         if(moveOn) {
             for (i in 1..3) {
                 for (j in 0..3) {
@@ -183,26 +202,33 @@ class UserViewModel : ViewModel(), ValueEventListener {
         else{
             count = 0
         }
+        // Returning the number of equal values in the sorted list
         return count
     }
 
+    // Compares current inputted MarketImage high with MarketImage on user's date of birth high
     fun compareImagesHigh(image: MarketImage): Int {
         var count = 1
         var moveOn = false
+        // Listing current marketImage high
         var imageHigh =
             listOf(image.DJI.high, image.FTSE.high, image.NASDAQ.high, image.SNP.high)
+        // Listing user's birth MarketImage high
         var selfHigh = listOf(
             currentUser.value?.birthImage?.DJI!!.high,
             currentUser.value?.birthImage?.FTSE!!.high,
             currentUser.value?.birthImage?.NASDAQ!!.high,
             currentUser.value?.birthImage?.SNP!!.high
         )
+        // Sorting them
         var imageHighSorted = imageHigh.sorted()
         var selfHighSorted = selfHigh.sorted()
+        // Checking to see is the top values (the largest high) is equal in both sorted lists
         for(k in 0..3){
             if(imageHigh.get(k) == imageHighSorted.get(0) && selfHigh.get(k) == selfHighSorted.get(0))
                 moveOn = true
         }
+        // If the top values are equal, increments how many other values are equal in sorted lists
         if(moveOn) {
             for (i in 1..3) {
                 for (j in 0..3) {
@@ -214,26 +240,33 @@ class UserViewModel : ViewModel(), ValueEventListener {
         else{
             count = 0
         }
+        // Returning the number of equal values in the sorted list
         return count
     }
 
+    // Compares current inputted MarketImage low with MarketImage on user's date of birth low
     fun compareImagesLow(image: MarketImage): Int {
         var count = 0
         var moveOn = false
+        // Listing current marketImage low
         var imageLow =
             listOf(image.DJI.low, image.FTSE.low, image.NASDAQ.low, image.SNP.low)
+        // Listing user's birth MarketImage low
         var selfLow = listOf(
             currentUser.value?.birthImage?.DJI!!.low,
             currentUser.value?.birthImage?.FTSE!!.low,
             currentUser.value?.birthImage?.NASDAQ!!.low,
             currentUser.value?.birthImage?.SNP!!.low
         )
+        // Sorting them
         var imageLowSorted = imageLow.sorted()
         var selfLowSorted = selfLow.sorted()
+        // Checking to see is the top values (the largest low) is equal in both sorted lists
         for(k in 0..3){
             if(imageLow.get(k) == imageLowSorted.get(3) && selfLow.get(k) == selfLowSorted.get(3))
                 moveOn = true
         }
+        // If the top values are equal, increments how many other values are equal in sorted lists
         if(moveOn) {
             for (i in 0..2) {
                 for (j in 0..3) {
@@ -245,9 +278,11 @@ class UserViewModel : ViewModel(), ValueEventListener {
         else{
             count = 0
         }
+        // Returning the number of equal values in the sorted list
         return count
     }
 
+    // Increments user's compatibility score with inputted MarketImage based on their differences
     fun compareImages(image: MarketImage): Int{
         var count = 0
         var change = compareImagesChange(image)
@@ -270,27 +305,30 @@ class UserViewModel : ViewModel(), ValueEventListener {
         return count
     }
 
+    // Saves the user and fetches their birthImage and adds them to the firebase
     fun addUser(user:User){
         currentUser.value = user
         apiManager.value?.fetchImage(user.birthday)
         firebase.value?.child("users")?.child(user.username)?.setValue(currentUser.value)
     }
 
+    // Updates the user's birthImage in firebase with specified index and IndexImage
     fun updateMI(symbol:String, image: IndexImage) {
-        Log.d("hello", "working")
         when(symbol) {
             "^FTSE" -> firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("birthImage")?.child("ftse")?.setValue(image)
             "^DJI" -> firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("birthImage")?.child("dji")?.setValue(image)
             "^GSPC" -> firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("birthImage")?.child("snp")?.setValue(image)
             else     -> firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("birthImage")?.child("nasdaq")?.setValue(image)
-            }
         }
+    }
 
+    // Determines a user's primary sign and their other list/order of signs
     fun determineSign(){
         val image = currentUser.value?.birthImage!!
         var selfChangeGlobal = sortedChange(image)
         var symbol = selfChangeGlobal.get(0).symbol
         var sign = ""
+        // Gives user special sign name based on their top stock index
         when(symbol) {
             "^FTSE" -> sign = "FTSE-o"
             "^DJI" -> sign = "Dow Jones-ces"
@@ -298,7 +336,9 @@ class UserViewModel : ViewModel(), ValueEventListener {
             "^IXIC" -> sign = "NASDAQ-rius"
             else     -> sign = ""
         }
+        // Inputs this sign into firebase
         firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("sign")?.setValue(sign)
+        // Lists user's signs in order highest value to lowest on their birthday
         var signs = arrayListOf<String>()
         selfChangeGlobal.forEach {
             var cur = ""
@@ -309,14 +349,13 @@ class UserViewModel : ViewModel(), ValueEventListener {
                 "^IXIC" -> cur = "NASDAQ"
                 else     -> cur = ""
             }
-            signs.add(cur)}
+            signs.add(cur)
+        }
+        // Saves user sign list in firebase
         firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("signs")?.setValue(signs)
-
-
-
-
     }
 
+    // If inputs are not null, updates user information in firebase
     fun editUserInfo(name: String?, bio: String?){
         if (name!= null && name != ""){
             firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("name")?.setValue(name)
@@ -326,19 +365,26 @@ class UserViewModel : ViewModel(), ValueEventListener {
         }
     }
 
+    // Adds friend to user's friend list with inputted username
     fun addFriend(username:String){
+        // Checks is user exists in firebase
         if (firebase.value?.child("users")?.child(username) != null) {
             var newFriends = arrayListOf<String>()
+            // Copies existing friend into friend list
             if (currentUser.value?.friends?.size!! > 0)
                 newFriends = currentUser.value?.friends as ArrayList<String>
+            // Adds new friend to list and firebase
             newFriends.add(username)
             currentUser.value?.friends = newFriends.toList()
             firebase.value?.child("users")?.child(currentUser.value?.username!!)?.child("friends")?.setValue(currentUser.value?.friends)
         }
     }
 
+    // Removes friend from user's friend list with inputted username
     fun removeFriend(username: String){
+        // Checks is user exists in friend list
         if (currentUser.value?.friends?.contains(username)!!) {
+            // Removes friend from users friend list and updates currentUser and firebase
             var newFriends = currentUser.value?.friends as ArrayList<String>
             newFriends.remove(username)
             currentUser.value?.friends = newFriends.toList()
@@ -346,21 +392,23 @@ class UserViewModel : ViewModel(), ValueEventListener {
                 ?.setValue(currentUser.value?.friends)
         }
     }
+
+    // Sets the currentUser as inputted user
     fun setUser(user:User) {
         currentUser.postValue(user)
+
+        // Defining event listener to override onDataChange
         val valueEventListener = object : ValueEventListener {
             var tmpFriends = ArrayList<User>()
             var tmpUser = currentUser.value
             override fun onDataChange(snapshot: DataSnapshot) {
-                Log.d("onDataCHange", snapshot.toString())
                 snapshot.child("users").children.forEach {
                     it.getValue(User::class.java)?.let {
-                        // update current user
+                        // Update current user information with any previously stored information
                         if (it.email == userAuth.value?.email) {
-                            Log.d("onDataChange", it.username)
                             tmpUser = it
                         }
-                        // update friends list
+                        // Update friends list with any previously stored friends
                         else if (currentUser.value?.friends?.contains(it.username) != null && currentUser.value?.friends?.contains(
                                 it.username
                             )!!
@@ -371,7 +419,8 @@ class UserViewModel : ViewModel(), ValueEventListener {
                 }
                 currentUser.postValue(tmpUser)
                 friends.postValue(tmpFriends)
-                // get quotes
+
+                // Get list quotes
                 var tmpQuotes = ArrayList<String>()
                 snapshot.child("quotes").children.forEach {
                     it.getValue(String::class.java)?.let {
@@ -380,7 +429,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
                 }
                 quotes.postValue(tmpQuotes)
 
-                // get daily messages
+                // Get map of daily messages
                 var tmpDaily = mutableMapOf<Int, String>()
                 var counter = 0
                 snapshot.child("daily_message").children.forEach {
@@ -391,7 +440,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
                 }
                 dailyMessage.postValue(tmpDaily)
 
-                // get index messages
+                // Get map of index messages
                 var tmpIndex = mutableMapOf<Int, String>()
                 counter = 0
                 snapshot.child("index_message").children.forEach {
@@ -406,21 +455,26 @@ class UserViewModel : ViewModel(), ValueEventListener {
                 Log.d("error", databaseError.getMessage())
             }
         }
+        // Sets firebase to update with valueEventListener
         firebase.value?.addListenerForSingleValueEvent(valueEventListener)
-
     }
+
+    // Sets currentFriend to inputted user
     fun setFriend(user:User) {
         currentFriend.value = user
         currentFriend.postValue(user)
     }
 
-
+    // Checks if username already exists in firebase
     fun checkUserExists(username:String):Boolean {
         val dbRef = firebase.value
+        // Gets equalTo query from firebase
         val userRef = dbRef?.child("users")?.orderByChild("username")?.equalTo(username)
         var exists = false
+        // Defining event listener to override onDataChange
         val valueEventListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                // Changes exists to true if it is in firebase
                 for (ds in dataSnapshot.children) {
                     exists = true
                 }
@@ -434,31 +488,30 @@ class UserViewModel : ViewModel(), ValueEventListener {
         return exists
     }
 
+    // Compares the inputted friend's MarketImage to currentUser's
     fun getFriendCompatibility(friend:User): Int {
-        //compare the friend's market image to yours using compareImages
         return compareImages(friend.birthImage)
     }
 
+    // Returns message based on inputted friend and compatibility score
     fun getFriendCompatibilityMessage(friend: String, score:Int): String {
         var comp = compatibility.value?.get(score)!!
         var output = "For you, ${friend} is a ${comp.personality}:\n${comp.message}"
         return output
     }
 
+    // Compares the current day's MarketImage to currentUser's
     fun calculateDailyScore(): Int {
         return compareImages(dailyImage.value!!)
     }
 
+    // Returns message based on inputted daily score
     fun getDailyReport(score:Int) : String{
-        Log.d("dailyMessage", dailyMessage.value.toString())
-        Log.d("score", score.toString())
         return dailyMessage.value?.get(score)!!
     }
 
+    // Returns integer based on how much inputted IndexImage has changed that day
     fun getIndexScore(index:IndexImage): Int {
-        Log.d("index", index.symbol)
-        Log.d("change", index.changePercent.toString())
-
         var percentChange: Int
         if (index.changePercent!! <= -1)
             percentChange = 1
@@ -474,6 +527,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
         return percentChange
     }
 
+    // Returns user friendly index name with inputted encoded index name
     fun getIndexName(index:String): String {
         when(index) {
             "^FTSE" -> return "FTSE"
@@ -483,6 +537,8 @@ class UserViewModel : ViewModel(), ValueEventListener {
             else     -> return ""
         }
     }
+
+    // Returns the inputted index's description
     fun getIndexDescription(index:String): String {
         when(index) {
             "^FTSE" -> return "The people of this sign are very loyal to others. Thay also usually find great passion in their trade. But their focus of these attributes usually also leads to them not prioritizing their own health or wellbeing."
@@ -493,28 +549,29 @@ class UserViewModel : ViewModel(), ValueEventListener {
         }
     }
 
+    // Returns message based on inputted index score
     fun getIndexReport(score:Int) : String{
-        Log.d("getIndexReport", indexMessage.value.toString())
-        Log.d("score", score.toString())
         return indexMessage.value?.get(score)!!
     }
 
+    // Returns random quote
     fun getRandomQuote(): String{
         var tmpList = quotes.value
         return tmpList?.shuffled()?.take(1)!![0]
     }
 
+    // Overrides onDataChange for viewModel
     override fun onDataChange(snapshot: DataSnapshot) {
         var tmpFriends = ArrayList<User>()
         var tmpUser = currentUser.value
-        // get users
+        // Get user information from firebase
         snapshot.child("users").children.forEach {
             it.getValue(User::class.java)?.let {
-                // update current user
+                // Update current user
                 if(it.email == userAuth.value?.email) {
                     tmpUser = it
                 }
-                // update friends list
+                // Update friends list
                 else if (currentUser.value?.friends?.contains(it.username) != null && currentUser.value?.friends?.contains(it.username)!!) {
                     tmpFriends.add(it)
                 }
@@ -523,7 +580,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
         currentUser.postValue(tmpUser)
         friends.postValue(tmpFriends)
 
-        // get quotes
+        // Get list of quotes
         var tmpQuotes = ArrayList<String>()
         snapshot.child("quotes").children.forEach {
             it.getValue(String::class.java)?.let {
@@ -532,7 +589,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
         }
         quotes.postValue(tmpQuotes)
 
-        // get daily messages
+        // Gets map of daily messages
         var tmpDaily = mutableMapOf<Int, String>()
         var counter = 0
         snapshot.child("daily_message").children.forEach {
@@ -543,7 +600,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
         }
         dailyMessage.postValue(tmpDaily)
 
-        // get index messages
+        // Gets map index messages
         var tmpIndex = mutableMapOf<Int, String>()
         counter = 0
         snapshot.child("index_message").children.forEach {
@@ -554,7 +611,7 @@ class UserViewModel : ViewModel(), ValueEventListener {
         }
         indexMessage.postValue(tmpIndex)
 
-        // get index messages
+        // Gets map of compatibility messages
         var tmpCompatability = mutableMapOf<Int, Compatibility>()
         snapshot.child("compatibility").children.forEach {
             it.getValue(Compatibility::class.java)?.let {
@@ -564,7 +621,6 @@ class UserViewModel : ViewModel(), ValueEventListener {
         compatibility.postValue(tmpCompatability)
 
     }
-
 
     override fun onCancelled(error: DatabaseError) {
         Log.e("db error", error.message)

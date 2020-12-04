@@ -40,10 +40,12 @@ class SignInFragment : Fragment() {
             val username = login_username.text.toString()
             val password = login_password.text.toString()
 
+            // Informs user if they are missing a username
             if (username == "") {
                 Toast.makeText(activity, "Missing Username",
                     Toast.LENGTH_SHORT).show();
             }
+            // Informs user if they are missing a password
             else if (password == "") {
                 Toast.makeText(activity, "Missing Password",
                     Toast.LENGTH_SHORT).show();
@@ -53,20 +55,25 @@ class SignInFragment : Fragment() {
                     .addOnCompleteListener() { task ->
                         if (task.isSuccessful) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d("Success", "signInWithEmailAndPassword:success")
                             val user = auth.currentUser!!
                             viewModel.updateAuth(user)
-                            //viewModel.getUserByName()
+
+                            // Retrieving user data from firebase
                             lateinit var dbRef: DatabaseReference
                             viewModel.firebase.observe(viewLifecycleOwner, {
                                 dbRef = it
                             })
+                            // Find user reference by matching email
                             val userRef = dbRef?.child("users")?.orderByChild("email")?.equalTo(user.email!!)
+
+                            // Defining event listener to override onDataChange
                             val valueEventListener = object : ValueEventListener {
                                 override fun onDataChange(dataSnapshot: DataSnapshot) {
                                     for (ds in dataSnapshot.children) {
+                                        // Getting user data from firebase
                                         val user = ds.getValue(User::class.java)
                                         viewModel.setUser(user!!)
+                                        // Getting user picture from firebase storage
                                         viewModel.storage.observe(viewLifecycleOwner, {
                                             var imageRef = it.child(user?.profilePic!!)
                                             val FIVE_MEGABYTES: Long = 1024 * 1024 * 5
@@ -101,37 +108,11 @@ class SignInFragment : Fragment() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_sign_in, container, false)
-    }
-
-
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SignInFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SignInFragment().apply {
-                arguments = Bundle().apply {
-                    putString("", param1)
-                    putString("", param2)
-                }
-            }
     }
 }

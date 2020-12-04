@@ -45,64 +45,69 @@ class RegisterFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
 
         reg_signUp_button.setOnClickListener {
+            // Making sure a user with the same username/password doesn't exist
             val email = email_editText.text.toString()
             val username = username_editText.text.toString()
             val conflictUser = viewModel.checkUserExists(username)
 
-
+            // Informs user if they are missing an email
             if (email == "") {
                 Toast.makeText(activity, "Missing Email",
                     Toast.LENGTH_SHORT).show();
             }
+            // Informs user if they are missing a password
             else if (password_editText.text.toString() == "") {
                 Toast.makeText(activity, "Missing Password",
                     Toast.LENGTH_SHORT).show();
             }
+            // Informs user if they need a matching password
             else if (password_editText.text.toString() != password_confirm_editText.text.toString()) {
                 Toast.makeText(activity, "Passwords must match",
                     Toast.LENGTH_SHORT).show();
             }
+            // Informs user if they are missing a username
             else if (username == "") {
                 Toast.makeText(activity, "Missing Username",
                     Toast.LENGTH_SHORT).show();
             }
-
+            // Informs user if their username is already taken
             else if (conflictUser) {
                 Toast.makeText(activity, "Username Unavailable",
                     Toast.LENGTH_SHORT).show();
             }
+            // Creates a user
             else {
                 auth.createUserWithEmailAndPassword(email, password_editText.text.toString())
                     .addOnCompleteListener(){ task ->
                         if (task.isSuccessful) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d("Success", "createUserWithEmail:success")
                             val user = auth.currentUser
                             viewModel.updateAuth(user!!)
 
-                            // add leading zeros to date
+                            // Add leading zeros to day and/or month
                             var day = reg_calenderView.month.toString()
                             if(reg_calenderView.month < 10)
                                 day = "0" + reg_calenderView.month.toString()
-
                             var month = reg_calenderView.month.toString()
                             if(reg_calenderView.month < 10)
                                 month = "0" + reg_calenderView.month.toString()
 
-                            var date = "${reg_calenderView.year}-${month}-${day}"
+                            val date = "${reg_calenderView.year}-${month}-${day}"
 
+                            // Saves user information in viewModel
                             viewModel.addUser(User(username,
                             email = user.email.toString(),
                             birthday = date,
                             profilePic = "${username}.png"
                             ))
+                            // Defaults user's profile picture with white picture
                             viewModel.setImage("${username}.png", BitmapFactory.decodeResource(resources, R.drawable.round_portrait_white_48dp))
                             viewModel.profilePic.postValue(BitmapFactory.decodeResource(resources, R.drawable.round_portrait_white_48dp))
+                            // Navigates to home fragment
                             findNavController().navigate(R.id.action_registerFragment_to_homeFragment)
                         } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("Failed", "createUserWithEmail:failure", task.exception)
-                            Toast.makeText(activity, "Email or Password is incorrect.",
+                            // Informs user if sign in fails
+                            Toast.makeText(activity, task.exception?.message,
                                 Toast.LENGTH_SHORT).show()
                         }
                     }

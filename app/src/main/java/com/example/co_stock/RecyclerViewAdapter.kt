@@ -33,15 +33,16 @@ class RecyclerViewAdapter(var friendsList: ArrayList<User>, var storage: Storage
         return friendsList.size
     }
 
+    // For the delete button on each friend item
     lateinit var deleteLambda: (User) -> Unit
 
+    // For the navigation action when friend item is clicked
     lateinit var clickLambda: (User) -> Unit
 
     class RecyclerViewHolder(val view: View, val deleteLambda: (User) -> Unit):
         RecyclerView.ViewHolder(view){
         fun bind(friend: User, clickLambda: (User) -> Unit, storage: StorageReference){
-
-                // load image
+                // Load image onto friend item
                 var imageRef = storage.child(friend.profilePic)
                 val FIVE_MEGABYTES: Long = 1024 * 1024 * 5
                 imageRef?.getBytes(FIVE_MEGABYTES)?.addOnSuccessListener {
